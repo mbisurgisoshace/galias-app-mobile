@@ -22,6 +22,18 @@ export class BuscarClientePage implements OnInit {
     console.log('ionViewDidLoad BuscarClientePage');
   }
 
+  getClientes(event: any) {
+    this.clientes = this.clienteService.getClientes();
+
+    let searchQuery: string = event.target.value;
+
+    if (searchQuery && searchQuery.trim() !== '') {
+      this.clientes = this.clientes.filter((cliente) => {
+        return (cliente.razonSocial.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1);
+      });
+    }
+  }
+
   onClienteClicked(cliente: any) {
     this.viewController.dismiss(cliente);
   }
