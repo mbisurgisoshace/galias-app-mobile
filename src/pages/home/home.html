@@ -1,14 +1,21 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Galias</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="onAddClicked()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content>
+  <ion-list>
+    <ion-list-header>Pedidos</ion-list-header>
+    <ion-item *ngFor="let pedido of pedidos">
+      <h2>#{{pedido.numero}}</h2>
+      <p>{{pedido.cliente}}</p>
+      <button ion-button clear item-end [color]="pedido.enviado ? 'success' : 'danger'" (click)="onDetalleClicked(pedido)">Detalle</button>
+    </ion-item>
+  </ion-list>
 </ion-content>

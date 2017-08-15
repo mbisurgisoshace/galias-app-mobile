@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Galias</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <img src="../../assets/logo.png" alt="log">
+</ion-content>
+
+<ion-footer padding>
+  <form #f="ngForm" (ngSubmit)="onLoginClicked(f)">
+    <ion-list>
+      <ion-item>
+        <ion-input type="text" placeholder="Usuario" ngModel name="username" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input type="password" placeholder="Contraseña" ngModel name="password" required></ion-input>
+      </ion-item>
+    </ion-list>
+    <button ion-button block text-uppercase type="submit" [disabled]="!f.valid">Ingresar</button>
+  </form>
+</ion-footer>
