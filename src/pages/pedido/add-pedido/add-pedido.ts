@@ -11,6 +11,8 @@ import { AuthService } from '../../../services/auth.service';
   templateUrl: 'add-pedido.html',
 })
 export class AddPedidoPage {
+  cliente: any;
+  items: any[];
 
   constructor(public navController: NavController, public authService: AuthService, public modalController: ModalController) {
   }
@@ -34,6 +36,11 @@ export class AddPedidoPage {
 
     modal.onDidDismiss((cliente: any) => {
       console.log(cliente);
+      this.cliente = cliente;
     });
+  }
+
+  onAddClicked() {
+    
   }
 }

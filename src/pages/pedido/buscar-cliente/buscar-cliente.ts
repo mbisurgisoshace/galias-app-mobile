@@ -9,7 +9,6 @@ import { ClienteService } from '../../../services/cliente.service';
 })
 export class BuscarClientePage implements OnInit {
   clientes: any[];
-  cliente: any;
 
   constructor(public viewController: ViewController, public clienteService: ClienteService) {
   }
