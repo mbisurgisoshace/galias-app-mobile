@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
+
+import { LoginPage } from '../../login/login';
+import { BuscarClientePage } from '../buscar-cliente/buscar-cliente';
+
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'page-add-pedido',
@@ -7,11 +12,28 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AddPedidoPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navController: NavController, public authService: AuthService, public modalController: ModalController) {
+  }
+
+  ionViewCanEnter() {
+    if (!this.authService.authenticated()) {
+      this.navController.setRoot(LoginPage);
+    }
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddPedidoPage');
   }
 
+  onBuscarClicked() {
+    console.log('onBuscarClicked()');
+
+    const modal = this.modalController.create(BuscarClientePage);
+
+    modal.present();
+
+    modal.onDidDismiss((cliente: any) => {
+      console.log(cliente);
+    });
+  }
 }

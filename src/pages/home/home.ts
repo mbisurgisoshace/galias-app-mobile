@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { LoginPage } from '../login/login';
@@ -6,25 +6,26 @@ import { AddPedidoPage } from '../pedido/add-pedido/add-pedido';
 import { PedidoDetallePage } from '../pedido/pedido-detalle/pedido-detalle';
 
 import { AuthService } from '../../services/auth.service';
+import { PedidoService } from '../../services/pedido.service';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
-  pedidos = [
-    {numero: '135752', cliente: 'Maximiliano Bisurgi', enviado: true},
-    {numero: '452761', cliente: 'Claudio Bisurgi', enviado: false},
-    {numero: '542126', cliente: 'Matias Bisurgi', enviado: false}
-  ]
+export class HomePage implements OnInit {
+  pedidos = [];
 
-  constructor(public navController: NavController, public authService: AuthService) {
+  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService) {
 
+  }
+
+  ngOnInit() {
+    this.pedidos = this.pedidoService.getPedidos();
   }
 
   ionViewCanEnter() {
     if (!this.authService.authenticated()) {
-      this.navController.push(LoginPage);
+      this.navController.setRoot(LoginPage);
     }
   }
 

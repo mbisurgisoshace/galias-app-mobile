@@ -9,8 +9,12 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { AddPedidoPage } from '../pages/pedido/add-pedido/add-pedido';
 import { PedidoDetallePage } from '../pages/pedido/pedido-detalle/pedido-detalle';
+import { BuscarClientePage } from '../pages/pedido/buscar-cliente/buscar-cliente';
+import { BuscarArticuloPage } from '../pages/pedido/buscar-articulo/buscar-articulo';
 
 import { AuthService } from '../services/auth.service';
+import { PedidoService } from '../services/pedido.service';
+import { ClienteService } from '../services/cliente.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,9 @@ import { AuthService } from '../services/auth.service';
     HomePage,
     LoginPage,
     AddPedidoPage,
-    PedidoDetallePage
+    PedidoDetallePage,
+    BuscarClientePage,
+    BuscarArticuloPage
   ],
   imports: [
     BrowserModule,
@@ -30,12 +36,16 @@ import { AuthService } from '../services/auth.service';
     HomePage,
     LoginPage,
     AddPedidoPage,
-    PedidoDetallePage
+    PedidoDetallePage,
+    BuscarClientePage,
+    BuscarArticuloPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     AuthService,
+    PedidoService,
+    ClienteService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

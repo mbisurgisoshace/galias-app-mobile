@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public authService: AuthService) {
+  constructor(public navController: NavController, public authService: AuthService) {
   }
 
   ionViewDidLoad() {
@@ -22,6 +22,6 @@ export class LoginPage {
   onLoginClicked(form: NgForm) {
     this.authService.logIn();
 
-    this.navCtrl.setRoot(HomePage);
+    this.navController.setRoot(HomePage);
   }
 }
