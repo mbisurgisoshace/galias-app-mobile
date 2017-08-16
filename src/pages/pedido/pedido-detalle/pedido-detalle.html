@@ -11,29 +11,36 @@
   <ion-list>
     <ion-list-header>Detalle</ion-list-header>
     <ion-row>
-      <ion-col col-6 text-center>
+      <ion-col class="col-header" col-6 text-center>
         <p>Articulo</p>
       </ion-col>
-      <ion-col col-3 text-center>
+      <ion-col class="col-header" col-3 text-center>
         <p>Cantidad</p>
       </ion-col>
-      <ion-col col-3 text-center>
+      <ion-col class="col-header" col-3 text-center>
         <p>Precio</p>
       </ion-col>
     </ion-row>
-    <ion-item *ngFor="let item of pedido.items">
-      <ion-row>
-        <ion-col col-6>
-          <p>{{item.articulo}}</p>
-        </ion-col>
-        <ion-col col-3 text-right>
-          <p>{{item.cantidad | number:'1.2-2'}}</p>
-        </ion-col>
-        <ion-col col-3 text-right>
-          <p>{{item.precio | currency:'USD':true:'2.2-2'}}</p>
-        </ion-col>
-      </ion-row>
-    </ion-item>
+    <ion-item-sliding *ngFor="let item of pedido.items; let i = index">
+      <ion-item>
+        <ion-row>
+          <ion-col col-6>
+            <p>{{item.articulo}}</p>
+          </ion-col>
+          <ion-col col-3 text-right>
+            <p>{{item.cantidad | number:'1.2-2'}}</p>
+          </ion-col>
+          <ion-col col-3 text-right>
+            <p>{{item.precio | currency:'USD':true:'2.2-2'}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="primary" icon-only (click)="onRemoveClicked(i)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 </ion-content>
 

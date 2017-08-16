@@ -1,9 +1,15 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>buscar-articulo</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Buscar Articulo</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content>
+  <ion-searchbar placeholder="Buscar" (ionInput)="getArticulos($event)"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let articulo of articulos" (click)="onArticuloClicked(articulo)">
+      <h3>{{articulo.codigo}}</h3>
+      <p>{{articulo.descripcion}}</p>
+    </ion-item>
+  </ion-list>
 </ion-content>

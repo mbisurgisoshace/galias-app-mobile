@@ -8,13 +8,43 @@
   <ion-list>
     <ion-list-header>Cliente</ion-list-header>
     <button ion-item icon-only (click)="onBuscarClicked()">
-      <ion-icon color="primary" name="search" item-start></ion-icon>
+      <ion-icon color="secondary" name="search" item-start></ion-icon>
     </button>
   </ion-list>
   <h2 padding-horizontal>{{cliente?.razonSocial}}</h2>
   <ion-list>
     <ion-list-header>Pedido</ion-list-header>
-    <ion-item *ngFor="let item of items"><{{item.articulo}}</ion-item>
+    <ion-row>
+      <ion-col class="col-header" col-6 text-center>
+        <p>Articulo</p>
+      </ion-col>
+      <ion-col class="col-header" col-3 text-center>
+        <p>Cantidad</p>
+      </ion-col>
+      <ion-col class="col-header" col-3 text-center>
+        <p>Precio</p>
+      </ion-col>
+    </ion-row>
+    <ion-item-sliding *ngFor="let item of items; let i = index">
+      <ion-item>
+        <ion-row>
+          <ion-col col-6>
+            <p>{{item.articulo}}</p>
+          </ion-col>
+          <ion-col col-3 text-right>
+            <p>{{item.cantidad | number:'1.2-2'}}</p>
+          </ion-col>
+          <ion-col col-3 text-right>
+            <p>{{item.precio | currency:'USD':true:'2.2-2'}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="primary" icon-only (click)="onRemoveClicked(i)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
   <ion-fab right bottom>
     <button ion-fab color="primary" (click)="onAddClicked()"><ion-icon name="add"></ion-icon></button>

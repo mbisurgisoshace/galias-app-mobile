@@ -11,10 +11,12 @@ import { AddPedidoPage } from '../pages/pedido/add-pedido/add-pedido';
 import { PedidoDetallePage } from '../pages/pedido/pedido-detalle/pedido-detalle';
 import { BuscarClientePage } from '../pages/pedido/buscar-cliente/buscar-cliente';
 import { BuscarArticuloPage } from '../pages/pedido/buscar-articulo/buscar-articulo';
+import { PromocionPage } from '../pages/pedido/promocion/promocion';
 
 import { AuthService } from '../services/auth.service';
 import { PedidoService } from '../services/pedido.service';
 import { ClienteService } from '../services/cliente.service';
+import { ArticuloService } from '../services/articulo.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { ClienteService } from '../services/cliente.service';
     AddPedidoPage,
     PedidoDetallePage,
     BuscarClientePage,
-    BuscarArticuloPage
+    BuscarArticuloPage,
+    PromocionPage
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,8 @@ import { ClienteService } from '../services/cliente.service';
     AddPedidoPage,
     PedidoDetallePage,
     BuscarClientePage,
-    BuscarArticuloPage
+    BuscarArticuloPage,
+    PromocionPage
   ],
   providers: [
     StatusBar,
@@ -46,6 +50,7 @@ import { ClienteService } from '../services/cliente.service';
     AuthService,
     PedidoService,
     ClienteService,
+    ArticuloService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

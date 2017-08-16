@@ -36,25 +36,26 @@ $grid-padding-width:         0px !default;
 
 $colors: (
   primary:    #ee3124,
-  secondary:  #32db64,
+  secondary:  #d8b5a3,
   danger:     #f44336,
   success:    #4caf50,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+
 );
 
 
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
-
+$list-ios-header-color: color($colors, primary);
 
 
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-
+$list-md-header-color: color($colors, primary);
 
 
 
