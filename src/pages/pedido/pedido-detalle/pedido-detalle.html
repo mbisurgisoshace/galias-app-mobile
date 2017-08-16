@@ -6,10 +6,18 @@
 
 </ion-header>
 
-<ion-content>
-  <h2 padding-horizontal>{{pedido.cliente}}</h2>
+<ion-content padding>
+   <ion-list>
+    <ion-list-header>
+      <ion-icon name="person" item-start></ion-icon>
+      Cliente <h2 class="cliente">{{pedido.cliente}}</h2>
+    </ion-list-header>
+  </ion-list>
   <ion-list>
-    <ion-list-header>Detalle</ion-list-header>
+    <ion-list-header>
+      <ion-icon name="cart" item-start></ion-icon>
+      Pedido
+    </ion-list-header>
     <ion-row>
       <ion-col class="col-header" col-6 text-center>
         <p>Articulo</p>
@@ -44,7 +52,7 @@
   </ion-list>
 </ion-content>
 
-<ion-footer padding-horizontal text-right>
+<ion-footer padding text-right>
   <ion-label stacked>Total</ion-label>
   <h5>{{getTotal() | currency:'USD':true:'2.2-2'}}</h5>
 </ion-footer>

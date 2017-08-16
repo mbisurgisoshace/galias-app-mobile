@@ -6,14 +6,19 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-list-header>Cliente</ion-list-header>
+    <ion-list-header>
+      <ion-icon name="person" item-start></ion-icon>
+      Cliente <h2 class="cliente">{{cliente?.razonSocial}}</h2>
+    </ion-list-header>
     <button ion-item icon-only (click)="onBuscarClicked()">
       <ion-icon color="secondary" name="search" item-start></ion-icon>
     </button>
   </ion-list>
-  <h2 padding-horizontal>{{cliente?.razonSocial}}</h2>
   <ion-list>
-    <ion-list-header>Pedido</ion-list-header>
+    <ion-list-header>
+      <ion-icon name="cart" item-start></ion-icon>
+      Pedido
+    </ion-list-header>
     <ion-row>
       <ion-col class="col-header" col-6 text-center>
         <p>Articulo</p>
