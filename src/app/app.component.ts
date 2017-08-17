@@ -18,5 +18,9 @@ export class MyApp {
       splashScreen.hide();
     });
   }
+
+  onSincronizarClicked() {
+    console.log('onSincronizarClicked()');
+  }
 }
 
