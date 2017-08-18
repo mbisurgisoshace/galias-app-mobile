@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+
+import { AuthService } from './auth.service';
+
+import { Articulo } from '../models/articulo.model';
+
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/do'
 
 @Injectable()
 export class ArticuloService {
-    private articulos = [];
+    private articulos;
 
-    constructor() {
+    constructor(public http: Http, public authService: AuthService) {
         this.initArticulos();
     }
 
@@ -19,5 +27,15 @@ export class ArticuloService {
 
     getArticulos() {
         return this.articulos.slice();
+    }
+
+    getAll() {
+        return this.http.get('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/articulos')
+            .map((res) => {
+                return res.json();
+            })
+            .do((articulos) => {
+                this.articulos = articulos;
+            });
     }
 }

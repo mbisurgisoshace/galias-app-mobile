@@ -24,7 +24,7 @@ export class HomePage implements OnInit {
   }
 
   ionViewCanEnter() {
-    if (!this.authService.authenticated()) {
+    if (!this.authService.isAuthenticated()) {
       this.navController.setRoot(LoginPage);
     }
   }

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
 
@@ -10,9 +10,17 @@ import { AuthService } from '../../services/auth.service';
   selector: 'page-login',
   templateUrl: 'login.html',
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
+  constructor(public navController: NavController, public authService: AuthService, public loadingController: LoadingController) {
+  }
 
-  constructor(public navController: NavController, public authService: AuthService) {
+  ngOnInit() {
+    this.authService.isAuthenticated()
+      .subscribe((isAuthenticated) => {
+        if (isAuthenticated) {
+          this.navController.setRoot(HomePage);
+        }
+      });
   }
 
   ionViewDidLoad() {
@@ -20,8 +28,21 @@ export class LoginPage {
   }
 
   onLoginClicked(form: NgForm) {
-    this.authService.logIn();
+    const loading = this.loadingController.create({
+      content: 'Iniciando sesion...'
+    });
 
-    this.navController.setRoot(HomePage);
+    loading.present();
+
+    this.authService.logIn(form.value.username, form.value.password)
+      .subscribe((err) => {
+        if (err) {
+          loading.dismiss();
+          console.log(err);
+        } else {
+          loading.dismiss();
+          this.navController.setRoot(HomePage);
+        }
+      });
   }
 }

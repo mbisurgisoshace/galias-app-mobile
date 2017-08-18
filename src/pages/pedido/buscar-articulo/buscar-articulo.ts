@@ -17,6 +17,9 @@ export class BuscarArticuloPage implements OnInit {
 
   ngOnInit() {
     this.articulos = this.articuloService.getArticulos();
+
+    this.articuloService.getAll()
+      .subscribe();
   }
 
   ionViewDidLoad() {
