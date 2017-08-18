@@ -39,6 +39,10 @@ export class AddPedidoPage {
     });
   }
 
+  onLocationClicked() {
+    console.log('onLocationClicked()');
+  }
+
   onAddClicked() {
     const modal = this.modalController.create(BuscarArticuloPage);
 

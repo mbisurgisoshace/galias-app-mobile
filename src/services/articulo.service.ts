@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { AuthService } from './auth.service';
@@ -9,24 +9,24 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/do'
 
 @Injectable()
-export class ArticuloService {
+export class ArticuloService implements OnInit {
     private articulos;
 
     constructor(public http: Http, public authService: AuthService) {
         this.initArticulos();
     }
 
-    private initArticulos() {
-        this.articulos = [
-            {codigo: '100001', descripcion: 'LEVADURA', precio: 12.44},
-            {codigo: '100002', descripcion: 'DUQUESA CLASICA', precio: 20.25},
-            {codigo: '100003', descripcion: 'COBERTURA DE CHOCOLATE', precio: 10.55},
-            {codigo: '100004', descripcion: 'MARGARINA', precio: 18.99}
-        ];
+    ngOnInit() {
+        console.log('ArticuloService ngOnInit()');
     }
 
-    getArticulos() {
-        return this.articulos.slice();
+    private initArticulos() {
+        this.articulos = [
+            { codigo: '100001', descripcion: 'LEVADURA', precio: 12.44 },
+            { codigo: '100002', descripcion: 'DUQUESA CLASICA', precio: 20.25 },
+            { codigo: '100003', descripcion: 'COBERTURA DE CHOCOLATE', precio: 10.55 },
+            { codigo: '100004', descripcion: 'MARGARINA', precio: 18.99 }
+        ];
     }
 
     getAll() {
@@ -37,5 +37,9 @@ export class ArticuloService {
             .do((articulos) => {
                 this.articulos = articulos;
             });
+    }
+
+    getArticulos() {
+        return this.articulos.slice();
     }
 }

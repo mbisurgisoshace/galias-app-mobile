@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
 
@@ -10,17 +10,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'page-login',
   templateUrl: 'login.html',
 })
-export class LoginPage implements OnInit {
-  constructor(public navController: NavController, public authService: AuthService, public loadingController: LoadingController) {
-  }
-
-  ngOnInit() {
-    this.authService.isAuthenticated()
-      .subscribe((isAuthenticated) => {
-        if (isAuthenticated) {
-          this.navController.setRoot(HomePage);
-        }
-      });
+export class LoginPage {
+  constructor(public navController: NavController, public authService: AuthService, public loadingController: LoadingController, public alertController: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -38,11 +29,29 @@ export class LoginPage implements OnInit {
       .subscribe((err) => {
         if (err) {
           loading.dismiss();
-          console.log(err);
+
+          const alert = this.alertController.create({
+            title: 'Inicio de sesion fallido',
+            subTitle: this.errorHandler(err.message),
+            buttons: ['Ok']
+          });
+
+          alert.present();
         } else {
           loading.dismiss();
           this.navController.setRoot(HomePage);
         }
       });
+  }
+
+  errorHandler(error: string) {
+    switch (error) {
+      case 'User does not exist.':
+        return 'El usuario no existe';
+      case 'Incorrect username or password.':
+        return 'El usuario o la contraseña son incorrectos';
+      default:
+        return error;
+    }
   }
 }

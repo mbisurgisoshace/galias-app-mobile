@@ -19,7 +19,9 @@ export class BuscarArticuloPage implements OnInit {
     this.articulos = this.articuloService.getArticulos();
 
     this.articuloService.getAll()
-      .subscribe();
+      .subscribe((articulos) => {
+        console.log(articulos);
+      });
   }
 
   ionViewDidLoad() {
@@ -39,12 +41,12 @@ export class BuscarArticuloPage implements OnInit {
   }
 
   onArticuloClicked(articulo: any) {
-    const modal = this.modalController.create(PromocionPage, {articulo: articulo});
+    const modal = this.modalController.create(PromocionPage, { articulo: articulo });
 
     modal.present();
 
     modal.onDidDismiss((promo: any) => {
-      const item = {articulo, promo};
+      const item = { articulo, promo };
 
       this.viewController.dismiss(item);
     });

@@ -1,6 +1,11 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>Agregar Pedido</ion-title>
+    <ion-buttons end *ngIf="cliente">
+      <button ion-button icon-only (click)="onLocationClicked()">
+        <ion-icon name="ios-locate-outline"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -8,7 +13,8 @@
   <ion-list>
     <ion-list-header>
       <ion-icon name="person" item-start></ion-icon>
-      Cliente <h2 class="cliente">{{cliente?.razonSocial}}</h2>
+      Cliente
+      <h2 class="cliente">{{cliente?.razonSocial}}</h2>
     </ion-list-header>
     <button ion-item icon-only (click)="onBuscarClicked()">
       <ion-icon color="secondary" name="search" item-start></ion-icon>
