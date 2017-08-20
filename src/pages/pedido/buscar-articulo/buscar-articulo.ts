@@ -5,23 +5,20 @@ import { PromocionPage } from '../promocion/promocion';
 
 import { ArticuloService } from '../../../services/articulo.service';
 
+import { Articulo } from '../../../models/articulo.model';
+
 @Component({
   selector: 'page-buscar-articulo',
   templateUrl: 'buscar-articulo.html',
 })
 export class BuscarArticuloPage implements OnInit {
-  articulos: any = [];
+  articulos: Articulo[] = [];
 
   constructor(public viewController: ViewController, public articuloService: ArticuloService, public modalController: ModalController) {
   }
 
   ngOnInit() {
     this.articulos = this.articuloService.getArticulos();
-
-    this.articuloService.getAll()
-      .subscribe((articulos) => {
-        console.log(articulos);
-      });
   }
 
   ionViewDidLoad() {
@@ -40,7 +37,7 @@ export class BuscarArticuloPage implements OnInit {
     }
   }
 
-  onArticuloClicked(articulo: any) {
+  onArticuloClicked(articulo: Articulo) {
     const modal = this.modalController.create(PromocionPage, { articulo: articulo });
 
     modal.present();

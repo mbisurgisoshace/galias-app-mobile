@@ -1,5 +1,8 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Storage } from '@ionic/storage';
+
+import { BehaviorSubject } from 'rxjs/Rx';
 
 import { AuthService } from './auth.service';
 
@@ -9,33 +12,48 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/do'
 
 @Injectable()
-export class ArticuloService implements OnInit {
-    private articulos;
+export class ArticuloService {
+    isLoading = new BehaviorSubject<boolean>(false);
+    
+    private articulos: Articulo[]; 
 
-    constructor(public http: Http, public authService: AuthService) {
-        this.initArticulos();
+    constructor(public http: Http, public authService: AuthService, public storage: Storage) {
+        console.log('ArticuloService constructor()');
+
+        this.init();
     }
 
-    ngOnInit() {
-        console.log('ArticuloService ngOnInit()');
+    private init() {
+        this.isLoading.next(true);
+
+        this.storage.get('articulos')
+            .then((articulos: Articulo[]) => {
+                if (articulos !== null) {
+                    this.articulos = articulos;
+                    this.isLoading.next(false);
+                } else {
+                    this.syncArticulos().subscribe((articulos: Articulo[]) => {
+                        this.articulos = articulos;
+                        this.isLoading.next(false);
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                this.isLoading.next(false);
+            });
     }
 
-    private initArticulos() {
-        this.articulos = [
-            { codigo: '100001', descripcion: 'LEVADURA', precio: 12.44 },
-            { codigo: '100002', descripcion: 'DUQUESA CLASICA', precio: 20.25 },
-            { codigo: '100003', descripcion: 'COBERTURA DE CHOCOLATE', precio: 10.55 },
-            { codigo: '100004', descripcion: 'MARGARINA', precio: 18.99 }
-        ];
-    }
-
-    getAll() {
+    syncArticulos() {
         return this.http.get('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/articulos')
             .map((res) => {
                 return res.json();
             })
-            .do((articulos) => {
-                this.articulos = articulos;
+            .do((articulos: Articulo[]) => {
+                this.storage.set('articulos', articulos)
+                    .then(() => {
+                        return articulos;
+                    });
             });
     }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { LoginPage } from '../login/login';
 import { AddPedidoPage } from '../pedido/add-pedido/add-pedido';
@@ -7,6 +7,7 @@ import { PedidoDetallePage } from '../pedido/pedido-detalle/pedido-detalle';
 
 import { AuthService } from '../../services/auth.service';
 import { PedidoService } from '../../services/pedido.service';
+import { ArticuloService } from '../../services/articulo.service';
 
 @Component({
   selector: 'page-home',
@@ -15,11 +16,23 @@ import { PedidoService } from '../../services/pedido.service';
 export class HomePage implements OnInit {
   pedidos = [];
 
-  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService) {
+  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public articuloService: ArticuloService, public loadingController: LoadingController) {
 
   }
 
   ngOnInit() {
+    const loading = this.loadingController.create({
+      content: 'Cargando articulos...'
+    });
+
+    this.articuloService.isLoading.subscribe((isLoading) => {
+      if (isLoading) {
+        loading.present();
+      } else {
+        loading.dismiss();
+      }
+    });
+    
     this.pedidos = this.pedidoService.getPedidos();
   }
 

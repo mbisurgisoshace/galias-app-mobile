@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, LoadingController } from 'ionic-angular';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { LoginPage } from '../../login/login';
 import { BuscarClientePage } from '../buscar-cliente/buscar-cliente';
@@ -15,7 +16,7 @@ export class AddPedidoPage {
   cliente: any;
   items: any[] = [];
 
-  constructor(public navController: NavController, public authService: AuthService, public modalController: ModalController) {
+  constructor(public navController: NavController, public authService: AuthService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController) {
   }
 
   ionViewCanEnter() {
@@ -40,7 +41,21 @@ export class AddPedidoPage {
   }
 
   onLocationClicked() {
-    console.log('onLocationClicked()');
+    const loading = this.loadingController.create({
+      content: 'Localizando...'
+    });
+
+    loading.present();
+
+    this.geolocation.getCurrentPosition()
+      .then((location) => {
+        loading.dismiss();
+        console.log(location);
+      })
+      .catch((err) => {
+        loading.dismiss();
+        console.log(err);
+      });
   }
 
   onAddClicked() {
@@ -68,15 +83,33 @@ export class AddPedidoPage {
   }
 
   promocionTipo1(item: any) {
-    this.items.push({articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidadA, precio: item.articulo.precio});
-    this.items.push({articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidadB, precio: 0});
+    let precio = 0;
+
+    if (item.articulo.precios.length > 0) {
+      precio = item.articulo.precios[0].precio;
+    }
+
+    this.items.push({ articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidadA, precio: precio });
+    this.items.push({ articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidadB, precio: 0 });
   }
 
   promocionTipo2(item: any) {
-    this.items.push({articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidad, precio: item.articulo.precio * (1 - (item.promo.promo.porcentaje / 100))});
+    let precio = 0;
+
+    if (item.articulo.precios.length > 0) {
+      precio = item.articulo.precios[0].precio;
+    }
+
+    this.items.push({ articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidad, precio: precio * (1 - (item.promo.promo.porcentaje / 100)) });
   }
 
   promocionTipo3(item: any) {
-    this.items.push({articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidad, precio: item.articulo.precio});
+    let precio = 0;
+
+    if (item.articulo.precios.length > 0) {
+      precio = item.articulo.precios[0].precio;
+    }
+
+    this.items.push({ articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidad, precio: precio });
   }
 }
