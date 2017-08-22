@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, ModalController, LoadingController } from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { NavController, ModalController, LoadingController, AlertController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { LoginPage } from '../../login/login';
@@ -18,11 +18,25 @@ import * as moment from 'moment';
   selector: 'page-add-pedido',
   templateUrl: 'add-pedido.html',
 })
-export class AddPedidoPage {
+export class AddPedidoPage implements OnInit {
   cliente: Cliente;
   items: any[] = [];
 
-  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController) {
+  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController, public alertController: AlertController, public toastController: ToastController) {
+  }
+
+  ngOnInit() {
+    const loading = this.loadingController.create({
+      content: 'Enviando...'
+    })
+
+    this.pedidoService.isLoading.subscribe((isLoading) => {
+      if (isLoading) {
+        loading.present();
+      } else {
+        loading.dismiss();
+      }
+    });
   }
 
   ionViewCanEnter() {
@@ -84,6 +98,37 @@ export class AddPedidoPage {
     });
   }
 
+  onEditClicked(index: number) {
+    const prompt = this.alertController.create({
+      title: 'Editar',
+      message: 'Ingrese la cantidad',
+      inputs: [
+        {
+          name: 'cantidad',
+          placeholder: 'Cantidad'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Guardar',
+          handler: (data) => {
+            if (data.cantidad === '' || data.cantidad === null) {
+              return;
+            }
+
+            this.items[index].cantidad = data.cantidad;
+          }
+        }
+      ]
+    });
+
+    prompt.present();
+  }
+
   onRemoveClicked(index: number) {
     this.items.splice(index, 1);
   }
@@ -102,11 +147,39 @@ export class AddPedidoPage {
       });
     let estado = 'generado';
 
-    pedido = { fecha: fecha, cliente: cliente, items: items, total: total, estado: estado, enviado: false }
+    pedido = {fecha: fecha, cliente: cliente, items: items, total: total, estado: estado, enviado: false}
 
     this.pedidoService.addPedido(pedido);
 
-    this.navController.pop();
+    const alert = this.alertController.create({
+      title: 'Enviar',
+      message: 'Desea enviar el pedido ahora?',
+      buttons: [
+        {
+          text: 'Si',
+          handler: () => {
+            this.pedidoService.syncPedido(pedido).subscribe((ped) => {
+              const toast = this.toastController.create({
+                message: 'Pedido enviado con ID: ' + ped._id,
+                duration: 2000
+              });
+
+              toast.present();
+              this.navController.pop();
+            });
+          }
+        },
+        {
+          text: 'No',
+          handler: () => {
+            this.navController.pop();
+          },
+          role: 'cancel'
+        }
+      ]
+    })
+
+    alert.present();
   }
 
   isDisabled() {

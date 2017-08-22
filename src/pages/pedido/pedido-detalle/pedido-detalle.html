@@ -1,16 +1,17 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Pedido #{{pedido.numero}}</ion-title>
+    <ion-title>#{{pedido._id}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
-   <ion-list>
+  <ion-list>
     <ion-list-header>
       <ion-icon name="person" item-start></ion-icon>
-      Cliente <h2 class="cliente">{{pedido.cliente.razonSocial}}</h2>
+      Cliente
+      <h2 class="cliente">{{pedido.cliente.razonSocial}}</h2>
     </ion-list-header>
   </ion-list>
   <ion-list>

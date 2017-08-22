@@ -1,3 +1,4 @@
+import { Pedido } from './../../models/pedido.model';
 import { Component, OnInit } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 
@@ -15,7 +16,7 @@ import { ClienteService } from '../../services/cliente.service';
   templateUrl: 'home.html'
 })
 export class HomePage implements OnInit {
-  pedidos = [];
+  pedidos: Pedido[] = [];
 
   constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public articuloService: ArticuloService, public clienteService: ClienteService, public loadingController: LoadingController) {
 
@@ -47,6 +48,12 @@ export class HomePage implements OnInit {
         loadingCli.dismiss();
       }
     });
+
+    this.pedidoService.hasItems.subscribe((hasItems) => {
+      if (hasItems) {
+        this.pedidos = this.pedidoService.getPedidos();
+      }
+    });
   }
 
   ionViewCanEnter() {
@@ -58,6 +65,7 @@ export class HomePage implements OnInit {
   ionViewDidEnter() {
     console.log('HomePage ionViewDidEnter()');
     this.pedidos = this.pedidoService.getPedidos();
+    console.log(this.pedidos);
   }
 
   onAddClicked() {

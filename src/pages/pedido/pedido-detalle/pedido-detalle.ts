@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { LoginPage } from '../../login/login';
 
@@ -12,7 +12,7 @@ import { AuthService } from '../../../services/auth.service';
 export class PedidoDetallePage implements OnInit {
   pedido: any;
 
-  constructor(public navController: NavController, public navParams: NavParams, public authService: AuthService) {
+  constructor(public navController: NavController, public navParams: NavParams, public authService: AuthService, public alertController: AlertController) {
   }
 
   ngOnInit() {
@@ -27,6 +27,10 @@ export class PedidoDetallePage implements OnInit {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PedidoDetallePage');
+  }
+
+  onRemoveClicked(index: number) {
+    this.pedido.items.splice(index, 1);
   }
 
   getTotal() {

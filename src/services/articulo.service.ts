@@ -24,27 +24,24 @@ export class ArticuloService {
     }
 
     private init() {
-        this.isLoading.next(true);
-
         this.storage.get('articulos')
             .then((articulos: Articulo[]) => {
                 if (articulos !== null) {
                     this.articulos = articulos;
-                    this.isLoading.next(false);
                 } else {
                     this.syncArticulos().subscribe((articulos: Articulo[]) => {
                         this.articulos = articulos;
-                        this.isLoading.next(false);
                     });
                 }
             })
             .catch((err) => {
                 console.log(err);
-                this.isLoading.next(false);
             });
     }
 
     syncArticulos() {
+        this.isLoading.next(true);
+
         return this.http.get('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/articulos')
             .map((res) => {
                 return res.json();
@@ -52,6 +49,7 @@ export class ArticuloService {
             .do((articulos: Articulo[]) => {
                 this.storage.set('articulos', articulos)
                     .then(() => {
+                        this.isLoading.next(false);
                         return articulos;
                     });
             });

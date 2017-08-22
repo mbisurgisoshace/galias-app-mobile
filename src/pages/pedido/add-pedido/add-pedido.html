@@ -51,6 +51,9 @@
         </ion-row>
       </ion-item>
       <ion-item-options>
+        <button ion-button color="edit" icon-only (click)="onEditClicked(i)">
+          <ion-icon name="paper"></ion-icon>
+        </button>
         <button ion-button color="primary" icon-only (click)="onRemoveClicked(i)">
           <ion-icon name="trash"></ion-icon>
         </button>
