@@ -40,7 +40,7 @@ export class ArticuloService {
     }
 
     syncArticulos() {
-        this.isLoading.next(true);
+        this.isLoading.next(true);        
 
         return this.http.get('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/articulos')
             .map((res) => {

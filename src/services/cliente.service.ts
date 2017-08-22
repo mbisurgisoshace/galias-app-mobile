@@ -25,10 +25,9 @@ export class ClienteService {
             .then((clientes: Cliente[]) => {
                 if (clientes !== null) {
                     this.clientes = clientes;
-                    this.isLoading.next(false);
                 } else {
                     this.syncClientes().subscribe((clientes: Cliente[]) => {
-                        this.clientes = clientes;                        
+                        this.clientes = clientes;
                     });
                 }
             })
@@ -48,6 +47,7 @@ export class ClienteService {
                 this.storage.set('clientes', clientes)
                     .then(() => {
                         this.isLoading.next(false);
+                        
                         return clientes;
                     });
             });
