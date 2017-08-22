@@ -21,17 +21,13 @@ export class ClienteService {
     }
 
     private init() {
-        this.isLoading.next(true);
-
         this.storage.get('clientes')
             .then((clientes: Cliente[]) => {
                 if (clientes !== null) {
                     this.clientes = clientes;
-                    this.isLoading.next(false);
                 } else {
                     this.syncClientes().subscribe((clientes: Cliente[]) => {
                         this.clientes = clientes;
-                        this.isLoading.next(false);
                     });
                 }
             })
@@ -42,6 +38,8 @@ export class ClienteService {
     }
 
     syncClientes() {
+        this.isLoading.next(true);
+
         return this.http.get('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/clientes')
             .map((res) => {
                 return res.json();
@@ -49,6 +47,8 @@ export class ClienteService {
             .do((clientes: Cliente[]) => {
                 this.storage.set('clientes', clientes)
                     .then(() => {
+                        this.isLoading.next(false);
+                        
                         return clientes;
                     });
             });
