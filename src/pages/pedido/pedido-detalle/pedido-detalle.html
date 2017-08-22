@@ -10,7 +10,7 @@
    <ion-list>
     <ion-list-header>
       <ion-icon name="person" item-start></ion-icon>
-      Cliente <h2 class="cliente">{{pedido.cliente}}</h2>
+      Cliente <h2 class="cliente">{{pedido.cliente.razonSocial}}</h2>
     </ion-list-header>
   </ion-list>
   <ion-list>
@@ -33,7 +33,7 @@
       <ion-item>
         <ion-row>
           <ion-col col-6>
-            <p>{{item.articulo}}</p>
+            <p>{{item.articulo.descripcion}}</p>
           </ion-col>
           <ion-col col-3 text-right>
             <p>{{item.cantidad | number:'1.2-2'}}</p>

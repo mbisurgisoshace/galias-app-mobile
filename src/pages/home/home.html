@@ -21,8 +21,8 @@
       Pedidos
     </ion-list-header>
     <ion-item *ngFor="let pedido of pedidos" no-padding>
-      <h2>#{{pedido.numero}}</h2>
-      <p>{{pedido.cliente}}</p>
+      <h2>#{{pedido._id}}</h2>
+      <p>{{pedido.cliente.razonSocial}}</p>
       <button ion-button clear item-end [color]="pedido.enviado ? 'success' : 'danger'" (click)="onDetalleClicked(pedido)">Detalle</button>
     </ion-item>
   </ion-list>

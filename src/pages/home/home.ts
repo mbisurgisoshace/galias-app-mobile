@@ -8,6 +8,7 @@ import { PedidoDetallePage } from '../pedido/pedido-detalle/pedido-detalle';
 import { AuthService } from '../../services/auth.service';
 import { PedidoService } from '../../services/pedido.service';
 import { ArticuloService } from '../../services/articulo.service';
+import { ClienteService } from '../../services/cliente.service';
 
 @Component({
   selector: 'page-home',
@@ -16,30 +17,47 @@ import { ArticuloService } from '../../services/articulo.service';
 export class HomePage implements OnInit {
   pedidos = [];
 
-  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public articuloService: ArticuloService, public loadingController: LoadingController) {
+  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public articuloService: ArticuloService, public clienteService: ClienteService, public loadingController: LoadingController) {
 
   }
 
   ngOnInit() {
-    const loading = this.loadingController.create({
+    console.log('HomePage ngOnInit()');
+
+    const loadingArt = this.loadingController.create({
       content: 'Cargando articulos...'
+    });
+
+    const loadingCli = this.loadingController.create({
+      content: 'Cargando clientes...'
     });
 
     this.articuloService.isLoading.subscribe((isLoading) => {
       if (isLoading) {
-        loading.present();
+        loadingArt.present();
       } else {
-        loading.dismiss();
+        loadingArt.dismiss();
       }
     });
-    
-    this.pedidos = this.pedidoService.getPedidos();
+
+    this.clienteService.isLoading.subscribe((isLoading) => {
+      if (isLoading) {
+        loadingCli.present();
+      } else {
+        loadingCli.dismiss();
+      }
+    });
   }
 
   ionViewCanEnter() {
     if (!this.authService.isAuthenticated()) {
       this.navController.setRoot(LoginPage);
     }
+  }
+
+  ionViewDidEnter() {
+    console.log('HomePage ionViewDidEnter()');
+    this.pedidos = this.pedidoService.getPedidos();
   }
 
   onAddClicked() {

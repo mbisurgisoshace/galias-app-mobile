@@ -1,4 +1,4 @@
-interface Cliente {
+export interface Cliente {
     _id: string;
     codigo: string;
     razonSocial: string;

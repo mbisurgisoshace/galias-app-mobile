@@ -7,16 +7,22 @@ import { BuscarClientePage } from '../buscar-cliente/buscar-cliente';
 import { BuscarArticuloPage } from '../buscar-articulo/buscar-articulo';
 
 import { AuthService } from '../../../services/auth.service';
+import { PedidoService } from '../../../services/pedido.service';
+
+import { Pedido } from '../../../models/pedido.model';
+import { Cliente } from '../../../models/cliente.model';
+
+import * as moment from 'moment';
 
 @Component({
   selector: 'page-add-pedido',
   templateUrl: 'add-pedido.html',
 })
 export class AddPedidoPage {
-  cliente: any;
+  cliente: Cliente;
   items: any[] = [];
 
-  constructor(public navController: NavController, public authService: AuthService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController) {
+  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController) {
   }
 
   ionViewCanEnter() {
@@ -34,7 +40,7 @@ export class AddPedidoPage {
 
     modal.present();
 
-    modal.onDidDismiss((cliente: any) => {
+    modal.onDidDismiss((cliente: Cliente) => {
       console.log(cliente);
       this.cliente = cliente;
     });
@@ -82,34 +88,63 @@ export class AddPedidoPage {
     this.items.splice(index, 1);
   }
 
-  promocionTipo1(item: any) {
-    let precio = 0;
+  onConfirmarClicked() {
+    let pedido: Pedido;
 
-    if (item.articulo.precios.length > 0) {
-      precio = item.articulo.precios[0].precio;
-    }
+    let fecha = moment().format('DD/MM/YYYY');
+    let cliente = this.cliente;
+    let items = this.items;
+    let total = this.items
+      .map((item) => {
+        return item.cantidad * item.precio;
+      }).reduce((total, subtotal) => {
+        return total + subtotal;
+      });
+    let estado = 'generado';
 
-    this.items.push({ articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidadA, precio: precio });
-    this.items.push({ articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidadB, precio: 0 });
+    pedido = { fecha: fecha, cliente: cliente, items: items, total: total, estado: estado, enviado: false }
+
+    this.pedidoService.addPedido(pedido);
+
+    this.navController.pop();
   }
 
-  promocionTipo2(item: any) {
-    let precio = 0;
-
-    if (item.articulo.precios.length > 0) {
-      precio = item.articulo.precios[0].precio;
+  isDisabled() {
+    if (!this.cliente || this.items.length === 0) {
+      return true;
+    } else {
+      return false;
     }
-
-    this.items.push({ articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidad, precio: precio * (1 - (item.promo.promo.porcentaje / 100)) });
   }
 
-  promocionTipo3(item: any) {
+  private promocionTipo1(item: any) {
     let precio = 0;
 
     if (item.articulo.precios.length > 0) {
       precio = item.articulo.precios[0].precio;
     }
 
-    this.items.push({ articulo: item.articulo.descripcion, cantidad: item.promo.promo.cantidad, precio: precio });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadA, precio: precio });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadB, precio: 0 });
+  }
+
+  private promocionTipo2(item: any) {
+    let precio = 0;
+
+    if (item.articulo.precios.length > 0) {
+      precio = item.articulo.precios[0].precio;
+    }
+
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio * (1 - (item.promo.promo.porcentaje / 100)) });
+  }
+
+  private promocionTipo3(item: any) {
+    let precio = 0;
+
+    if (item.articulo.precios.length > 0) {
+      precio = item.articulo.precios[0].precio;
+    }
+
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio });
   }
 }

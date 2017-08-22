@@ -3,12 +3,14 @@ import { ViewController } from 'ionic-angular';
 
 import { ClienteService } from '../../../services/cliente.service';
 
+import { Cliente } from '../../../models/cliente.model';
+
 @Component({
   selector: 'page-buscar-cliente',
   templateUrl: 'buscar-cliente.html',
 })
 export class BuscarClientePage implements OnInit {
-  clientes: any[];
+  clientes: Cliente[];
 
   constructor(public viewController: ViewController, public clienteService: ClienteService) {
   }
@@ -33,7 +35,7 @@ export class BuscarClientePage implements OnInit {
     }
   }
 
-  onClienteClicked(cliente: any) {
+  onClienteClicked(cliente: Cliente) {
     this.viewController.dismiss(cliente);
   }
 }
