@@ -6,4 +6,5 @@ export interface Cliente {
     vendedor: string;
     email: string;
     telefono: string;
+    ubicacion: number[];
 }

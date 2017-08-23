@@ -18,8 +18,6 @@ export class ArticuloService {
     private articulos: Articulo[]; 
 
     constructor(public http: Http, public authService: AuthService, public storage: Storage) {
-        console.log('ArticuloService constructor()');
-
         this.init();
     }
 

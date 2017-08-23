@@ -21,10 +21,6 @@ export class BuscarArticuloPage implements OnInit {
     this.articulos = this.articuloService.getArticulos();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad BuscarArticuloPage');
-  }
-
   getArticulos(event: any) {
     this.articulos = this.articuloService.getArticulos();
 

@@ -8,6 +8,7 @@ import { BuscarArticuloPage } from '../buscar-articulo/buscar-articulo';
 
 import { AuthService } from '../../../services/auth.service';
 import { PedidoService } from '../../../services/pedido.service';
+import { ClienteService } from '../../../services/cliente.service';
 
 import { Pedido } from '../../../models/pedido.model';
 import { Cliente } from '../../../models/cliente.model';
@@ -22,7 +23,7 @@ export class AddPedidoPage implements OnInit {
   cliente: Cliente;
   items: any[] = [];
 
-  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController, public alertController: AlertController, public toastController: ToastController) {
+  constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public clienteService: ClienteService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController, public alertController: AlertController, public toastController: ToastController) {
   }
 
   ngOnInit() {
@@ -45,17 +46,12 @@ export class AddPedidoPage implements OnInit {
     }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddPedidoPage');
-  }
-
   onBuscarClicked() {
     const modal = this.modalController.create(BuscarClientePage);
 
     modal.present();
 
     modal.onDidDismiss((cliente: Cliente) => {
-      console.log(cliente);
       this.cliente = cliente;
     });
   }
@@ -65,17 +61,15 @@ export class AddPedidoPage implements OnInit {
       content: 'Localizando...'
     });
 
-    loading.present();
+    this.clienteService.isUpdating.subscribe((isUpdating) => {
+      if (isUpdating) {
+        loading.present();
+      } else {
+        loading.dismiss();
+      }
+    });
 
-    this.geolocation.getCurrentPosition()
-      .then((location) => {
-        loading.dismiss();
-        console.log(location);
-      })
-      .catch((err) => {
-        loading.dismiss();
-        console.log(err);
-      });
+    this.clienteService.updateClienteLocation(this.cliente);
   }
 
   onAddClicked() {
@@ -147,7 +141,7 @@ export class AddPedidoPage implements OnInit {
       });
     let estado = 'generado';
 
-    pedido = {fecha: fecha, cliente: cliente, items: items, total: total, estado: estado, enviado: false}
+    pedido = { fecha: fecha, cliente: cliente, items: items, total: total, estado: estado, enviado: false }
 
     this.pedidoService.addPedido(pedido);
 
@@ -159,9 +153,18 @@ export class AddPedidoPage implements OnInit {
           text: 'Si',
           handler: () => {
             this.pedidoService.syncPedido(pedido).subscribe((ped) => {
+              console.log(ped);
               const toast = this.toastController.create({
-                message: 'Pedido enviado con ID: ' + ped._id,
-                duration: 2000
+                message: 'Pedido enviado con ID: ' + ped.pedido._id,
+                duration: 5000
+              });
+
+              toast.present();
+              this.navController.pop();
+            }, (err) => {
+              const toast = this.toastController.create({
+                message: 'No se ha podido enviar el pedido.',
+                duration: 5000
               });
 
               toast.present();

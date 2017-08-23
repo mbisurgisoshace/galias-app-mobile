@@ -19,10 +19,6 @@ export class BuscarClientePage implements OnInit {
     this.clientes = this.clienteService.getClientes();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad BuscarClientePage');
-  }
-
   getClientes(event: any) {
     this.clientes = this.clienteService.getClientes();
 

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ToastController, LoadingController } from 'ionic-angular';
 
 import { LoginPage } from '../../login/login';
 
 import { AuthService } from '../../../services/auth.service';
+import { PedidoService } from './../../../services/pedido.service';
+
+import { Pedido } from '../../../models/pedido.model';
 
 @Component({
   selector: 'page-pedido-detalle',
@@ -12,11 +15,23 @@ import { AuthService } from '../../../services/auth.service';
 export class PedidoDetallePage implements OnInit {
   pedido: any;
 
-  constructor(public navController: NavController, public navParams: NavParams, public authService: AuthService, public alertController: AlertController) {
+  constructor(public navController: NavController, public navParams: NavParams, public authService: AuthService, public alertController: AlertController, public pedidoService: PedidoService, public toastController: ToastController, public loadingController: LoadingController) {
   }
 
   ngOnInit() {
     this.pedido = this.navParams.get('pedido');
+
+    const loading = this.loadingController.create({
+      content: 'Enviando...'
+    })
+
+    this.pedidoService.isLoading.subscribe((isLoading) => {
+      if (isLoading) {
+        loading.present();
+      } else {
+        loading.dismiss();
+      }
+    });
   }
 
   ionViewCanEnter() {
@@ -25,8 +40,24 @@ export class PedidoDetallePage implements OnInit {
     }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PedidoDetallePage');
+  onSendClicked(pedido: Pedido) {
+    this.pedidoService.syncPedido(pedido).subscribe((ped) => {
+      const toast = this.toastController.create({
+        message: 'Pedido enviado con ID: ' + ped.pedido._id,
+        duration: 5000
+      });
+
+      toast.present();
+      this.navController.pop();
+    }, (err) => {
+      const toast = this.toastController.create({
+        message: 'No se ha podido enviar el pedido.',
+        duration: 5000
+      });
+
+      toast.present();
+      this.navController.pop();
+    });
   }
 
   onRemoveClicked(index: number) {

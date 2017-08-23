@@ -23,8 +23,6 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    console.log('HomePage ngOnInit()');
-
     const loadingArt = this.loadingController.create({
       content: 'Cargando articulos...'
     });
@@ -63,9 +61,7 @@ export class HomePage implements OnInit {
   }
 
   ionViewDidEnter() {
-    console.log('HomePage ionViewDidEnter()');
     this.pedidos = this.pedidoService.getPedidos();
-    console.log(this.pedidos);
   }
 
   onAddClicked() {

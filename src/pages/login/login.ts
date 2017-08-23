@@ -14,10 +14,6 @@ export class LoginPage {
   constructor(public navController: NavController, public authService: AuthService, public loadingController: LoadingController, public alertController: AlertController) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
-  }
-
   onLoginClicked(form: NgForm) {
     const loading = this.loadingController.create({
       content: 'Iniciando sesion...'

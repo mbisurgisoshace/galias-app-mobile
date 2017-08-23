@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { BehaviorSubject } from 'rxjs/Rx';
 
@@ -11,12 +12,11 @@ import { Cliente } from '../models/cliente.model';
 @Injectable()
 export class ClienteService {
     isLoading = new BehaviorSubject<boolean>(false);
+    isUpdating = new BehaviorSubject<boolean>(false);
 
     private clientes: Cliente[] = [];
 
-    constructor(public http: Http, public authService: AuthService, public storage: Storage) {
-        console.log('ClienteService constructor()');
-
+    constructor(public http: Http, public authService: AuthService, public storage: Storage, public geolocation: Geolocation) {
         this.init();
     }
 
@@ -32,7 +32,7 @@ export class ClienteService {
                 }
             })
             .catch((err) => {
-                console.log(err);        
+                console.log(err);
             });
     }
 
@@ -47,9 +47,35 @@ export class ClienteService {
                 this.storage.set('clientes', clientes)
                     .then(() => {
                         this.isLoading.next(false);
-                        
+
                         return clientes;
                     });
+            });
+    }
+
+    updateClienteLocation(cliente: Cliente) {
+        this.isUpdating.next(true);
+
+        this.geolocation.getCurrentPosition()
+            .then((location) => {
+                cliente.ubicacion = [];
+                cliente.ubicacion.push(location.coords.longitude);
+                cliente.ubicacion.push(location.coords.latitude);
+
+                console.log(location);
+
+                this.http.put('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/clientes', cliente)
+                    .map((res) => {
+                        return res.json();
+                    })
+                    .do((res) => {
+                        this.isUpdating.next(false);
+                        console.log(res);
+                    }).subscribe();
+            })
+            .catch((err) => {
+                this.isUpdating.next(false);
+                console.log(err);
             });
     }
 

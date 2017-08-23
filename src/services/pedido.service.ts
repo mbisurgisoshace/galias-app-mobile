@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
 
 import { Pedido } from '../models/pedido.model';
 
@@ -14,8 +14,6 @@ export class PedidoService {
     private pedidos: Pedido[] = [];
 
     constructor(public storage: Storage, public http: Http) {
-        console.log('PedidosService constructor()');
-
         this.init();
     }
 
@@ -51,12 +49,11 @@ export class PedidoService {
                     .catch((err) => {
                         this.isLoading.next(false);
                     });
-                
-                return {err: null, pedido: res.pedido}
             })
             .catch((err) => {
                 console.log(err);
-                return err;
+                this.isLoading.next(false);
+                return Observable.throw(err);
             });
     }
 

@@ -24,10 +24,6 @@ export class PromocionPage implements OnInit {
     this.articulo = this.navParams.get('articulo');
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PromocionPage');
-  }
-
   onPromoSelected(promocion: any) {
     this.promocion = promocion;
   }
