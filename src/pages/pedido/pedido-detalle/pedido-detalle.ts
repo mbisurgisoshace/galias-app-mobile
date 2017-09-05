@@ -20,24 +20,33 @@ export class PedidoDetallePage implements OnInit {
 
   ngOnInit() {
     this.pedido = this.navParams.get('pedido');
-
-    const loading = this.loadingController.create({
-      content: 'Enviando...'
-    })
-
-    this.pedidoService.isLoading.subscribe((isLoading) => {
-      if (isLoading) {
-        loading.present();
-      } else {
-        loading.dismiss();
-      }
-    });
   }
 
   ionViewCanEnter() {
     if (!this.authService.isAuthenticated()) {
       this.navController.setRoot(LoginPage);
     }
+  }
+
+  ionViewDidEnter() {
+    let loading;
+
+    this.pedidoService.isLoading.subscribe((isLoading) => {
+      if (isLoading) {
+        if (!loading) {
+          loading = this.loadingController.create({
+            content: 'Enviando...'
+          });
+        }
+
+        loading.present();
+      } else {
+        if (loading) {
+          loading.dismiss();
+          loading = null;
+        }
+      }
+    });
   }
 
   onSendClicked(pedido: Pedido) {

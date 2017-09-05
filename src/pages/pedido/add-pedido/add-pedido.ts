@@ -27,23 +27,53 @@ export class AddPedidoPage implements OnInit {
   }
 
   ngOnInit() {
-    const loading = this.loadingController.create({
-      content: 'Enviando...'
-    })
 
-    this.pedidoService.isLoading.subscribe((isLoading) => {
-      if (isLoading) {
-        loading.present();
-      } else {
-        loading.dismiss();
-      }
-    });
   }
 
   ionViewCanEnter() {
     if (!this.authService.isAuthenticated()) {
       this.navController.setRoot(LoginPage);
     }
+  }
+
+  ionViewDidEnter() {
+    let loadingEnviando;
+
+    this.pedidoService.isLoading.subscribe((isLoading) => {
+      if (isLoading) {
+        if (!loadingEnviando) {
+          loadingEnviando = this.loadingController.create({
+            content: 'Localizando...'
+          });
+        }
+
+        loadingEnviando.present();
+      } else {
+        if (loadingEnviando) {
+          loadingEnviando.dismiss();
+          loadingEnviando = null;
+        }
+      }
+    });
+
+    let loadingLocalizando;
+
+    this.clienteService.isUpdating.subscribe((isUpdating) => {
+      if (isUpdating) {
+        if (!loadingLocalizando) {
+          loadingLocalizando = this.loadingController.create({
+            content: 'Localizando...'
+          });
+        }
+
+        loadingLocalizando.present();
+      } else {
+        if (loadingLocalizando) {
+          loadingLocalizando.dismiss();
+          loadingLocalizando = null;
+        }
+      }
+    });
   }
 
   onBuscarClicked() {
@@ -57,18 +87,6 @@ export class AddPedidoPage implements OnInit {
   }
 
   onLocationClicked() {
-    const loading = this.loadingController.create({
-      content: 'Localizando...'
-    });
-
-    this.clienteService.isUpdating.subscribe((isUpdating) => {
-      if (isUpdating) {
-        loading.present();
-      } else {
-        loading.dismiss();
-      }
-    });
-
     this.clienteService.updateClienteLocation(this.cliente);
   }
 
@@ -200,8 +218,8 @@ export class AddPedidoPage implements OnInit {
       precio = item.articulo.precios[0].precio;
     }
 
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadA, precio: precio });
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadB, precio: 0 });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadA, precio: precio, extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadB, precio: 0, extra: item.promo.promo.extra });
   }
 
   private promocionTipo2(item: any) {
@@ -211,7 +229,7 @@ export class AddPedidoPage implements OnInit {
       precio = item.articulo.precios[0].precio;
     }
 
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio * (1 - (item.promo.promo.porcentaje / 100)) });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio * (1 - (item.promo.promo.porcentaje / 100)), extra: item.promo.promo.extra });
   }
 
   private promocionTipo3(item: any) {
@@ -221,6 +239,6 @@ export class AddPedidoPage implements OnInit {
       precio = item.articulo.precios[0].precio;
     }
 
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio, extra: item.promo.promo.extra });
   }
 }

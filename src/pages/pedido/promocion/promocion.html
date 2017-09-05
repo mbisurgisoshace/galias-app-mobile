@@ -30,6 +30,10 @@
         <ion-label floating>Cantidad (B)</ion-label>
         <ion-input type="number" name="cantidadB" ngModel required></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label>Extra</ion-label>
+        <ion-checkbox color="primary" name="extra" [(ngModel)]="extra"></ion-checkbox>
+      </ion-item>
     </ion-list>
     <ion-row justify-content-center>
       <button ion-button small type="submit" [disabled]="!f.valid">Confirmar</button>
@@ -47,6 +51,10 @@
         <ion-label floating>%</ion-label>
         <ion-input type="number" name="porcentaje" ngModel required></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label>Extra</ion-label>
+        <ion-checkbox color="primary" name="extra" [(ngModel)]="extra"></ion-checkbox>
+      </ion-item>
     </ion-list>
     <ion-row justify-content-center>
       <button ion-button small type="submit" [disabled]="!f.valid">Confirmar</button>
@@ -59,6 +67,10 @@
       <ion-item>
         <ion-label floating>Cantidad</ion-label>
         <ion-input type="number" name="cantidad" ngModel required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Extra</ion-label>
+        <ion-checkbox color="primary" name="extra" [(ngModel)]="extra"></ion-checkbox>
       </ion-item>
     </ion-list>
     <ion-row justify-content-center>

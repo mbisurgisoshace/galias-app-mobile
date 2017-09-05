@@ -16,6 +16,7 @@ export class PromocionPage implements OnInit {
 
   promocion: any;
   articulo: any;
+  extra: boolean = false;
 
   constructor(public viewController: ViewController, public navParams: NavParams) {
   }
