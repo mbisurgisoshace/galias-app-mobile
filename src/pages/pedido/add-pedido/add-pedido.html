@@ -65,3 +65,8 @@
     <button ion-fab color="primary" (click)="onAddClicked()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 </ion-content>
+
+<ion-footer padding text-right>
+  <ion-label stacked>Total</ion-label>
+  <h5>{{getTotal() | currency:'USD':true:'2.2-2'}}</h5>
+</ion-footer>

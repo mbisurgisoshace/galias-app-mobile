@@ -43,7 +43,7 @@ export class AddPedidoPage implements OnInit {
       if (isLoading) {
         if (!loadingEnviando) {
           loadingEnviando = this.loadingController.create({
-            content: 'Localizando...'
+            content: 'Enviando...'
           });
         }
 
@@ -240,5 +240,19 @@ export class AddPedidoPage implements OnInit {
     }
 
     this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio, extra: item.promo.promo.extra });
+  }
+
+  getTotal() {
+    let total = 0;
+
+    for (let i = 0; i < this.items.length; i++) {
+      let item = this.items[i];
+
+      let subTotal = item.cantidad * item.precio;
+
+      total = total + subTotal;
+    }
+
+    return total;
   }
 }

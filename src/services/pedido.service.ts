@@ -73,4 +73,16 @@ export class PedidoService {
                 this.pedidos.slice(this.pedidos.indexOf(pedido), 1);
             });
     }
+
+    updatePedido() {
+        console.log(this.pedidos);
+
+        this.storage.set('pedidos', this.pedidos)
+            .then(() => {
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 }

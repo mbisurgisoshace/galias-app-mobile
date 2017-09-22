@@ -69,8 +69,47 @@ export class PedidoDetallePage implements OnInit {
     });
   }
 
+  onEditClicked(index: number) {
+    const prompt = this.alertController.create({
+      title: 'Editar',
+      message: 'Ingrese la cantidad',
+      inputs: [
+        {
+          name: 'cantidad',
+          placeholder: 'Cantidad'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Guardar',
+          handler: (data) => {
+            if (data.cantidad === '' || data.cantidad === null) {
+              return;
+            }
+
+            this.pedido.items[index].cantidad = data.cantidad;
+            this.pedido.total = this.getTotal();
+            this.pedido.enviado = false;
+
+            this.pedidoService.updatePedido();
+          }
+        }
+      ]
+    });
+
+    prompt.present();
+  }
+
   onRemoveClicked(index: number) {
     this.pedido.items.splice(index, 1);
+    this.pedido.total = this.getTotal();
+    this.pedido.enviado = false;
+
+    this.pedidoService.updatePedido();
   }
 
   getTotal() {
