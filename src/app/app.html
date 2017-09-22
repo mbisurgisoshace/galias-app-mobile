@@ -1,21 +1,25 @@
 <ion-menu [content]="nav">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <ion-list>
-        <button ion-item (click)="onSincronizarClicked()">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="onCerrarDiaClicked()">
+              <ion-icon name="close-circle" color="primary" item-start></ion-icon>
+              Cerrar Dia
+          </button>
+      <button ion-item (click)="onSincronizarClicked()">
           <ion-icon name="sync" color="primary" item-start></ion-icon>
           Sincronizar
         </button>
-        <button ion-item (click)="onCerrarSesionClicked()">
+      <button ion-item (click)="onCerrarSesionClicked()">
           <ion-icon name="log-out" color="primary" item-start></ion-icon>
           Cerrar Sesion
         </button>
-      </ion-list>
-    </ion-content>
-  </ion-menu>
+    </ion-list>
+  </ion-content>
+</ion-menu>
 
 <ion-nav [root]="rootPage" #nav></ion-nav>

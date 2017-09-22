@@ -47,7 +47,7 @@ export class ClienteService {
                 this.storage.set('clientes', clientes)
                     .then(() => {
                         this.isLoading.next(false);
-
+                        this.clientes = clientes;
                         return clientes;
                     });
             });

@@ -73,4 +73,8 @@ export class PedidoService {
                 this.pedidos.slice(this.pedidos.indexOf(pedido), 1);
             });
     }
+
+    removePedidos() {
+        this.pedidos = [];
+    }
 }

@@ -5,7 +5,8 @@ export interface Pedido {
     _id?: string;
     fecha: string;
     cliente: Cliente;
-    items: {articulo: Articulo, cantidad: number, precio: number, extra: boolean}[];
+    comentario: string;
+    items: any[];
     total: number;
     estado: string;
     enviado: boolean;

@@ -10,7 +10,6 @@
   </ion-navbar>
 
 </ion-header>
-
 <ion-content padding>
   <ion-list>
     <ion-list-header>
@@ -18,6 +17,15 @@
       Cliente
       <h2 class="cliente">{{pedido.cliente.razonSocial}}</h2>
     </ion-list-header>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      <ion-icon name="paper" item-start></ion-icon>
+      Comentario
+    </ion-list-header>
+    <ion-item>
+      <ion-input type="text" value={{pedido.comentario}} disabled></ion-input>
+    </ion-item>
   </ion-list>
   <ion-list>
     <ion-list-header>
