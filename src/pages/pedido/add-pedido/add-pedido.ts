@@ -21,6 +21,7 @@ import * as moment from 'moment';
 })
 export class AddPedidoPage implements OnInit {
   cliente: Cliente;
+  comentario: string;
   items: any[] = [];
 
   constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public clienteService: ClienteService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController, public alertController: AlertController, public toastController: ToastController) {
@@ -150,6 +151,7 @@ export class AddPedidoPage implements OnInit {
 
     let fecha = moment().format('DD/MM/YYYY');
     let cliente = this.cliente;
+    let comentario = this.comentario;
     let items = this.items;
     let total = this.items
       .map((item) => {
@@ -159,7 +161,7 @@ export class AddPedidoPage implements OnInit {
       });
     let estado = 'generado';
 
-    pedido = { fecha: fecha, cliente: cliente, items: items, total: total, estado: estado, enviado: false }
+    pedido = { fecha: fecha, cliente: cliente, comentario: comentario, items: items, total: total, estado: estado, enviado: false }
 
     this.pedidoService.addPedido(pedido);
 
@@ -218,8 +220,8 @@ export class AddPedidoPage implements OnInit {
       precio = item.articulo.precios[0].precio;
     }
 
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadA, precio: precio, extra: item.promo.promo.extra });
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadB, precio: 0, extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadA, precio: precio, promocion: 'A+B', extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadB, precio: 0, promocion: 'A+B', extra: item.promo.promo.extra });
   }
 
   private promocionTipo2(item: any) {
@@ -229,7 +231,7 @@ export class AddPedidoPage implements OnInit {
       precio = item.articulo.precios[0].precio;
     }
 
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio * (1 - (item.promo.promo.porcentaje / 100)), extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, descuento: item.promo.promo.porcentaje, precio: precio * (1 - (item.promo.promo.porcentaje / 100)), promocion: 'Descuento', extra: item.promo.promo.extra });
   }
 
   private promocionTipo3(item: any) {
@@ -239,7 +241,7 @@ export class AddPedidoPage implements OnInit {
       precio = item.articulo.precios[0].precio;
     }
 
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio, extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio, promocion: 'Sin Promocion', extra: item.promo.promo.extra });
   }
 
   getTotal() {

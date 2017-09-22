@@ -85,4 +85,8 @@ export class PedidoService {
                 console.log(err);
             });
     }
+
+    removePedidos() {
+        this.pedidos = [];
+    }
 }

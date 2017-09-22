@@ -48,6 +48,7 @@ export class ArticuloService {
                 this.storage.set('articulos', articulos)
                     .then(() => {
                         this.isLoading.next(false);
+                        this.articulos = articulos;
                         return articulos;
                     });
             });
