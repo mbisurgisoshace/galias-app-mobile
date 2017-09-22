@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController, LoadingController } from 'ionic-angular';
+import { Platform, NavController, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -18,7 +18,6 @@ import { ArticuloService } from '../services/articulo.service';
 export class MyApp {
   @ViewChild('nav') navController: NavController;
   rootPage: any = LoginPage;
-  sincronizando;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public authService: AuthService, public menuController: MenuController, public storage: Storage, public pedidoService: PedidoService, public clienteService: ClienteService, public articuloService: ArticuloService) {
     platform.ready().then(() => {
@@ -35,10 +34,6 @@ export class MyApp {
         } else {
           this.rootPage = LoginPage;
         }
-      });
-
-      this.sincronizando = this.loadingController.create({
-        content: 'Sincronizando...'
       });
   }
 
