@@ -10,10 +10,11 @@ import { AuthService } from '../../../services/auth.service';
 import { PedidoService } from '../../../services/pedido.service';
 import { ClienteService } from '../../../services/cliente.service';
 
-import { Pedido } from '../../../models/pedido.model';
-import { Cliente } from '../../../models/cliente.model';
+import { Pedido, Item } from '../../../models/pedido.model';
+import { Cliente, Direccion } from '../../../models/cliente.model';
 
 import * as moment from 'moment';
+import { Articulo } from '../../../models/articulo.model';
 
 @Component({
   selector: 'page-add-pedido',
@@ -21,8 +22,9 @@ import * as moment from 'moment';
 })
 export class AddPedidoPage implements OnInit {
   cliente: Cliente;
+  sucursal: Direccion;
   comentario: string;
-  items: any[] = [];
+  items: Item[] = [];
 
   constructor(public navController: NavController, public authService: AuthService, public pedidoService: PedidoService, public clienteService: ClienteService, public modalController: ModalController, public geolocation: Geolocation, public loadingController: LoadingController, public alertController: AlertController, public toastController: ToastController) {
   }
@@ -82,8 +84,9 @@ export class AddPedidoPage implements OnInit {
 
     modal.present();
 
-    modal.onDidDismiss((cliente: Cliente) => {
-      this.cliente = cliente;
+    modal.onDidDismiss((cliente) => {
+      this.cliente = cliente.cliente;
+      this.sucursal = cliente.sucursal;
     });
   }
 
@@ -149,8 +152,9 @@ export class AddPedidoPage implements OnInit {
   onConfirmarClicked() {
     let pedido: Pedido;
 
-    let fecha = moment().format('DD/MM/YYYY');
+    let fecha = moment(moment(new Date()).format('YYYY-MM-DD')).valueOf();
     let cliente = this.cliente;
+    let sucursal = this.sucursal;
     let comentario = this.comentario;
     let items = this.items;
     let total = this.items
@@ -161,9 +165,11 @@ export class AddPedidoPage implements OnInit {
       });
     let estado = 'generado';
 
-    pedido = { fecha: fecha, cliente: cliente, comentario: comentario, items: items, total: total, estado: estado, enviado: false }
+    pedido = { fecha: fecha, cliente: cliente, sucursal: sucursal, comentario: comentario, items: items, total: total, estado: estado, enviado: false }
 
     this.pedidoService.addPedido(pedido);
+
+    console.log(pedido);
 
     const alert = this.alertController.create({
       title: 'Enviar',
@@ -175,7 +181,7 @@ export class AddPedidoPage implements OnInit {
             this.pedidoService.syncPedido(pedido).subscribe((ped) => {
               console.log(ped);
               const toast = this.toastController.create({
-                message: 'Pedido enviado con ID: ' + ped.pedido._id,
+                message: 'Pedido enviado con ID: ' + ped._id,
                 duration: 5000
               });
 
@@ -214,34 +220,16 @@ export class AddPedidoPage implements OnInit {
   }
 
   private promocionTipo1(item: any) {
-    let precio = 0;
-
-    if (item.articulo.precios.length > 0) {
-      precio = item.articulo.precios[0].precio;
-    }
-
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadA, precio: precio, promocion: 'A+B', extra: item.promo.promo.extra });
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadB, precio: 0, promocion: 'A+B', extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadA, descuento: 0, precio: item.articulo.precioVta, promocion: 'a+b', extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadB, descuento: 0, precio: 0, promocion: 'a+b', extra: item.promo.promo.extra });
   }
 
   private promocionTipo2(item: any) {
-    let precio = 0;
-
-    if (item.articulo.precios.length > 0) {
-      precio = item.articulo.precios[0].precio;
-    }
-
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, descuento: item.promo.promo.porcentaje, precio: precio * (1 - (item.promo.promo.porcentaje / 100)), promocion: 'Descuento', extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, descuento: item.promo.promo.porcentaje, precio: item.articulo.precioVta * (1 - (item.promo.promo.porcentaje / 100)), promocion: '%', extra: item.promo.promo.extra });
   }
 
   private promocionTipo3(item: any) {
-    let precio = 0;
-
-    if (item.articulo.precios.length > 0) {
-      precio = item.articulo.precios[0].precio;
-    }
-
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, precio: precio, promocion: 'Sin Promocion', extra: item.promo.promo.extra });
+    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, descuento: 0, precio: item.articulo.precioVta, promocion: 'sin', extra: item.promo.promo.extra });
   }
 
   getTotal() {

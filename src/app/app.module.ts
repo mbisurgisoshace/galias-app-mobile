@@ -21,6 +21,7 @@ import { AuthService } from '../services/auth.service';
 import { PedidoService } from '../services/pedido.service';
 import { ClienteService } from '../services/cliente.service';
 import { ArticuloService } from '../services/articulo.service';
+import { SucursalPage } from '../pages/sucursal/sucursal';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ArticuloService } from '../services/articulo.service';
     PedidoDetallePage,
     BuscarClientePage,
     BuscarArticuloPage,
-    PromocionPage
+    PromocionPage,
+    SucursalPage
   ],
   imports: [
     BrowserModule,
@@ -48,7 +50,8 @@ import { ArticuloService } from '../services/articulo.service';
     PedidoDetallePage,
     BuscarClientePage,
     BuscarArticuloPage,
-    PromocionPage
+    PromocionPage,
+    SucursalPage
   ],
   providers: [
     StatusBar,

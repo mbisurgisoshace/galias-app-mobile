@@ -39,9 +39,9 @@ export class ClienteService {
     syncClientes() {
         this.isLoading.next(true);
 
-        return this.http.get('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/clientes')
+        return this.http.get('http://localhost:4000/api/cliente/list')
             .map((res) => {
-                return res.json();
+                return res.json().clientes;
             })
             .do((clientes: Cliente[]) => {
                 this.storage.set('clientes', clientes)
@@ -54,29 +54,29 @@ export class ClienteService {
     }
 
     updateClienteLocation(cliente: Cliente) {
-        this.isUpdating.next(true);
+        // this.isUpdating.next(true);
 
-        this.geolocation.getCurrentPosition()
-            .then((location) => {
-                cliente.ubicacion = [];
-                cliente.ubicacion.push(location.coords.longitude);
-                cliente.ubicacion.push(location.coords.latitude);
+        // this.geolocation.getCurrentPosition()
+        //     .then((location) => {
+        //         cliente.ubicacion = [];
+        //         cliente.ubicacion.push(location.coords.longitude);
+        //         cliente.ubicacion.push(location.coords.latitude);
 
-                console.log(location);
+        //         console.log(location);
 
-                this.http.put('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/clientes', cliente)
-                    .map((res) => {
-                        return res.json();
-                    })
-                    .do((res) => {
-                        this.isUpdating.next(false);
-                        console.log(res);
-                    }).subscribe();
-            })
-            .catch((err) => {
-                this.isUpdating.next(false);
-                console.log(err);
-            });
+        //         this.http.put('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/clientes', cliente)
+        //             .map((res) => {
+        //                 return res.json();
+        //             })
+        //             .do((res) => {
+        //                 this.isUpdating.next(false);
+        //                 console.log(res);
+        //             }).subscribe();
+        //     })
+        //     .catch((err) => {
+        //         this.isUpdating.next(false);
+        //         console.log(err);
+        //     });
     }
 
     getClientes() {

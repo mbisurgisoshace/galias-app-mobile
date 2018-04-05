@@ -40,9 +40,9 @@ export class ArticuloService {
     syncArticulos() {
         this.isLoading.next(true);        
 
-        return this.http.get('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/articulos')
+        return this.http.get('http://localhost:4000/api/articulo/list')
             .map((res) => {
-                return res.json();
+                return res.json().articulos;
             })
             .do((articulos: Articulo[]) => {
                 this.storage.set('articulos', articulos)

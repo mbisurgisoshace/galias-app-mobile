@@ -52,7 +52,7 @@ export class PedidoDetallePage implements OnInit {
   onSendClicked(pedido: Pedido) {
     this.pedidoService.syncPedido(pedido).subscribe((ped) => {
       const toast = this.toastController.create({
-        message: 'Pedido enviado con ID: ' + ped.pedido._id,
+        message: 'Pedido enviado con ID: ' + ped._id,
         duration: 5000
       });
 

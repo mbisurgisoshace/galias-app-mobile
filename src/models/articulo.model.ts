@@ -1,6 +1,13 @@
+export interface Equivalencia {
+    unidad: string,
+    equivalencia: number,
+    defecto: boolean
+}
+
 export interface Articulo {
     _id: string;
     codigo: string;
     descripcion: string;
-    precios: {tipo: number, precio: number}[];
+    unidadesVta: Equivalencia[];
+    precioVta: number;
 }

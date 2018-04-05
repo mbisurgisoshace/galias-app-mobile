@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ViewController } from 'ionic-angular';
+import { ViewController, ModalController } from 'ionic-angular';
 
 import { ClienteService } from '../../../services/cliente.service';
 
-import { Cliente } from '../../../models/cliente.model';
+import { Cliente, Direccion } from '../../../models/cliente.model';
+import { SucursalPage } from '../../sucursal/sucursal';
 
 @Component({
   selector: 'page-buscar-cliente',
@@ -12,7 +13,7 @@ import { Cliente } from '../../../models/cliente.model';
 export class BuscarClientePage implements OnInit {
   clientes: Cliente[];
 
-  constructor(public viewController: ViewController, public clienteService: ClienteService) {
+  constructor(public viewController: ViewController, public clienteService: ClienteService, public modalController: ModalController) {
   }
 
   ngOnInit() {
@@ -32,6 +33,14 @@ export class BuscarClientePage implements OnInit {
   }
 
   onClienteClicked(cliente: Cliente) {
-    this.viewController.dismiss(cliente);
+    const modal = this.modalController.create(SucursalPage, { sucursales: cliente.sucursales });
+
+    modal.present();
+
+    modal.onDidDismiss((sucursal: Direccion) => {
+      const cli = { cliente, sucursal };
+
+      this.viewController.dismiss(cli);
+    });
   }
 }

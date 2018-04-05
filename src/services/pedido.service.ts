@@ -34,12 +34,13 @@ export class PedidoService {
     syncPedido(pedido: Pedido) {
         this.isLoading.next(true);
 
-        return this.http.post('https://8vxcze5tyc.execute-api.us-east-1.amazonaws.com/dev/api/pedidos', pedido)
+        return this.http.post('http://localhost:4000/api/pedido/new', pedido)
             .map((res) => {
                 return res.json();
             })
             .do((res) => {
-                this.pedidos[this.pedidos.indexOf(pedido)]._id = res.pedido._id;
+                
+                this.pedidos[this.pedidos.indexOf(pedido)]._id = res._id;
                 this.pedidos[this.pedidos.indexOf(pedido)].enviado = true;
 
                 this.storage.set('pedidos', this.pedidos)
