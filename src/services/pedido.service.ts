@@ -12,6 +12,7 @@ export class PedidoService {
     hasItems = new BehaviorSubject<boolean>(false);
 
     private pedidos: Pedido[] = [];
+    private currentPedido: Pedido = null;
 
     constructor(public storage: Storage, public http: Http) {
         this.init();
