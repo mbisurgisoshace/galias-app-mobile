@@ -40,7 +40,7 @@ export class ArticuloService {
     syncArticulos() {
         this.isLoading.next(true);        
 
-        return this.http.get('http://localhost:4000/api/articulo/list')
+        return this.http.get('https://galias-server-api-dev.herokuapp.com/api/articulo/list')
             .map((res) => {
                 return res.json().articulos;
             })

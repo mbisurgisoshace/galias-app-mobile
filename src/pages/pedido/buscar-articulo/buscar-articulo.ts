@@ -6,6 +6,7 @@ import { PromocionPage } from '../promocion/promocion';
 import { ArticuloService } from '../../../services/articulo.service';
 
 import { Articulo } from '../../../models/articulo.model';
+import { PedidoService } from '../../../services/pedido.service';
 
 @Component({
   selector: 'page-buscar-articulo',
@@ -14,7 +15,7 @@ import { Articulo } from '../../../models/articulo.model';
 export class BuscarArticuloPage implements OnInit {
   articulos: Articulo[] = [];
 
-  constructor(public viewController: ViewController, public articuloService: ArticuloService, public modalController: ModalController) {
+  constructor(public viewController: ViewController, public articuloService: ArticuloService, public pedidoService: PedidoService, public modalController: ModalController) {
   }
 
   ngOnInit() {
@@ -34,12 +35,14 @@ export class BuscarArticuloPage implements OnInit {
   }
 
   onArticuloClicked(articulo: Articulo) {
+    this.pedidoService.getCurrentItem().articulo = articulo;
+
     const modal = this.modalController.create(PromocionPage, { articulo: articulo });
 
     modal.present();
 
     modal.onDidDismiss((promo: any) => {
-      const item = { articulo, promo };
+      const item = { promo };
 
       this.viewController.dismiss(item);
     });

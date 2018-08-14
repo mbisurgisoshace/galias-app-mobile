@@ -4,7 +4,9 @@ import { Storage } from '@ionic/storage';
 
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
 
-import { Pedido } from '../models/pedido.model';
+import { Pedido, Item } from '../models/pedido.model';
+
+import * as moment from 'moment';
 
 @Injectable()
 export class PedidoService {
@@ -12,7 +14,8 @@ export class PedidoService {
     hasItems = new BehaviorSubject<boolean>(false);
 
     private pedidos: Pedido[] = [];
-    private currentPedido: Pedido = null;
+    private currentPedido = null as Pedido;
+    private currentItem = null as Item;
 
     constructor(public storage: Storage, public http: Http) {
         this.init();
@@ -35,7 +38,7 @@ export class PedidoService {
     syncPedido(pedido: Pedido) {
         this.isLoading.next(true);
 
-        return this.http.post('http://localhost:4000/api/pedido/new', pedido)
+        return this.http.post('https://galias-server-api-dev.herokuapp.com/api/pedido/new', pedido)
             .map((res) => {
                 return res.json();
             })
@@ -59,12 +62,45 @@ export class PedidoService {
             });
     }
 
+    getCurrentPedido() {
+        return this.currentPedido;
+    }
+
+    getCurrentItem() {
+        return this.currentItem;
+    }
+
     getPedidos() {
         return this.pedidos.slice();
     }
 
-    addPedido(pedido: Pedido) {
-        this.pedidos.push(pedido);
+    createPedido() {
+        this.currentPedido = {} as Pedido;
+        this.currentPedido.fecha = moment(moment(new Date()).format('YYYY-MM-DD')).valueOf();
+        this.currentPedido.items = [];
+    }
+
+    resetPedido() {
+        this.currentPedido = null as Pedido;
+    }
+
+    createItem() {
+        this.currentItem = {} as Item;
+    }
+
+    resetItem() {
+        this.currentItem = {} as Item;
+    }
+
+    addPedido() {
+        this.currentPedido.total = this.currentPedido.items.map((item) => {
+            return item.cantidad * item.precio;
+        }).reduce((total, subtotal) => {
+            return total + subtotal;
+        });
+        this.currentPedido.estado = 'generado'
+
+        this.pedidos.push(this.currentPedido);
 
         this.storage.set('pedidos', this.pedidos)
             .then(() => {
@@ -72,7 +108,7 @@ export class PedidoService {
             })
             .catch((err) => {
                 console.log(err);
-                this.pedidos.slice(this.pedidos.indexOf(pedido), 1);
+                this.pedidos.slice(this.pedidos.indexOf(this.currentPedido), 1);
             });
     }
 

@@ -12,6 +12,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { AddPedidoPage } from '../pages/pedido/add-pedido/add-pedido';
+import { PedidoTipoPage } from '../pages/pedido/pedido-tipo/pedido-tipo';
 import { PedidoDetallePage } from '../pages/pedido/pedido-detalle/pedido-detalle';
 import { BuscarClientePage } from '../pages/pedido/buscar-cliente/buscar-cliente';
 import { BuscarArticuloPage } from '../pages/pedido/buscar-articulo/buscar-articulo';
@@ -29,6 +30,7 @@ import { SucursalPage } from '../pages/sucursal/sucursal';
     HomePage,
     LoginPage,
     AddPedidoPage,
+    PedidoTipoPage,
     PedidoDetallePage,
     BuscarClientePage,
     BuscarArticuloPage,
@@ -47,6 +49,7 @@ import { SucursalPage } from '../pages/sucursal/sucursal';
     HomePage,
     LoginPage,
     AddPedidoPage,
+    PedidoTipoPage,
     PedidoDetallePage,
     BuscarClientePage,
     BuscarArticuloPage,

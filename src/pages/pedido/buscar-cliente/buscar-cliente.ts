@@ -5,6 +5,7 @@ import { ClienteService } from '../../../services/cliente.service';
 
 import { Cliente, Direccion } from '../../../models/cliente.model';
 import { SucursalPage } from '../../sucursal/sucursal';
+import { PedidoService } from '../../../services/pedido.service';
 
 @Component({
   selector: 'page-buscar-cliente',
@@ -13,7 +14,7 @@ import { SucursalPage } from '../../sucursal/sucursal';
 export class BuscarClientePage implements OnInit {
   clientes: Cliente[];
 
-  constructor(public viewController: ViewController, public clienteService: ClienteService, public modalController: ModalController) {
+  constructor(public viewController: ViewController, public clienteService: ClienteService, public pedidoService: PedidoService, public modalController: ModalController) {
   }
 
   ngOnInit() {
@@ -38,7 +39,12 @@ export class BuscarClientePage implements OnInit {
     modal.present();
 
     modal.onDidDismiss((sucursal: Direccion) => {
+      this.pedidoService.getCurrentPedido().cliente = cliente;
+      this.pedidoService.getCurrentPedido().sucursal = sucursal;
+      
       const cli = { cliente, sucursal };
+
+      console.log(this.pedidoService.getCurrentPedido());
 
       this.viewController.dismiss(cli);
     });

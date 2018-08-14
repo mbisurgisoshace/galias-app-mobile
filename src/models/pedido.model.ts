@@ -2,7 +2,7 @@ import { Cliente, Direccion } from './cliente.model';
 import { Articulo } from './articulo.model';
 
 export interface Item {
-    articulo: string;
+    articulo: Articulo;
     promocion: string;
     cantidad: number;
     descuento: number;
@@ -20,4 +20,5 @@ export interface Pedido {
     total: number;
     estado: string;
     enviado: boolean;
+    extra: boolean;
 }

@@ -30,7 +30,7 @@ export class AddPedidoPage implements OnInit {
   }
 
   ngOnInit() {
-
+    this.items = this.pedidoService.getCurrentPedido().items;
   }
 
   ionViewCanEnter() {
@@ -95,6 +95,8 @@ export class AddPedidoPage implements OnInit {
   }
 
   onAddClicked() {
+    this.pedidoService.createItem();
+
     const modal = this.modalController.create(BuscarArticuloPage);
 
     modal.present();
@@ -136,7 +138,7 @@ export class AddPedidoPage implements OnInit {
               return;
             }
 
-            this.items[index].cantidad = data.cantidad;
+            this.pedidoService.getCurrentPedido().items[index].cantidad = data.cantidad;
           }
         }
       ]
@@ -150,26 +152,7 @@ export class AddPedidoPage implements OnInit {
   }
 
   onConfirmarClicked() {
-    let pedido: Pedido;
-
-    let fecha = moment(moment(new Date()).format('YYYY-MM-DD')).valueOf();
-    let cliente = this.cliente;
-    let sucursal = this.sucursal;
-    let comentario = this.comentario;
-    let items = this.items;
-    let total = this.items
-      .map((item) => {
-        return item.cantidad * item.precio;
-      }).reduce((total, subtotal) => {
-        return total + subtotal;
-      });
-    let estado = 'generado';
-
-    pedido = { fecha: fecha, cliente: cliente, sucursal: sucursal, comentario: comentario, items: items, total: total, estado: estado, enviado: false }
-
-    this.pedidoService.addPedido(pedido);
-
-    console.log(pedido);
+    this.pedidoService.addPedido();
 
     const alert = this.alertController.create({
       title: 'Enviar',
@@ -178,15 +161,14 @@ export class AddPedidoPage implements OnInit {
         {
           text: 'Si',
           handler: () => {
-            this.pedidoService.syncPedido(pedido).subscribe((ped) => {
-              console.log(ped);
+            this.pedidoService.syncPedido(this.pedidoService.getCurrentPedido()).subscribe((ped) => {
               const toast = this.toastController.create({
                 message: 'Pedido enviado con ID: ' + ped._id,
                 duration: 5000
               });
 
               toast.present();
-              this.navController.pop();
+              this.navController.popToRoot();
             }, (err) => {
               const toast = this.toastController.create({
                 message: 'No se ha podido enviar el pedido.',
@@ -194,14 +176,14 @@ export class AddPedidoPage implements OnInit {
               });
 
               toast.present();
-              this.navController.pop();
+              this.navController.popToRoot();
             });
           }
         },
         {
           text: 'No',
           handler: () => {
-            this.navController.pop();
+            this.navController.popToRoot();
           },
           role: 'cancel'
         }
@@ -212,7 +194,9 @@ export class AddPedidoPage implements OnInit {
   }
 
   isDisabled() {
-    if (!this.cliente || this.items.length === 0) {
+    let pedido = this.pedidoService.getCurrentPedido();
+
+    if (!pedido.cliente || pedido.items.length === 0) {
       return true;
     } else {
       return false;
@@ -220,22 +204,52 @@ export class AddPedidoPage implements OnInit {
   }
 
   private promocionTipo1(item: any) {
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadA, descuento: 0, precio: item.articulo.precioVta, promocion: 'a+b', extra: item.promo.promo.extra });
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidadB, descuento: 0, precio: 0, promocion: 'a+b', extra: item.promo.promo.extra });
+    let currentItem: Item = this.pedidoService.getCurrentItem();
+    currentItem.descuento = 0;
+    currentItem.promocion = 'a+b';
+
+    let itemA: Item = { ...currentItem };
+    let itemB: Item = { ...currentItem };
+
+    itemA.cantidad = item.promo.promo.cantidadA;
+    itemA.precio = currentItem.articulo.precioVta;
+    itemB.cantidad = item.promo.promo.cantidadB;
+    itemB.precio = 0;
+
+    this.pedidoService.getCurrentPedido().items.push(itemA);
+    this.pedidoService.getCurrentPedido().items.push(itemB);
+
+    this.pedidoService.resetItem();
   }
 
   private promocionTipo2(item: any) {
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, descuento: item.promo.promo.porcentaje, precio: item.articulo.precioVta * (1 - (item.promo.promo.porcentaje / 100)), promocion: '%', extra: item.promo.promo.extra });
+    let currentItem: Item = this.pedidoService.getCurrentItem();
+    currentItem.cantidad = item.promo.promo.cantidad;
+    currentItem.precio = currentItem.articulo.precioVta * (1 - (item.promo.promo.porcentaje / 100));
+    currentItem.descuento = item.promo.promo.porcentaje;
+    currentItem.promocion = '%';
+
+    this.pedidoService.getCurrentPedido().items.push(currentItem);
+
+    this.pedidoService.resetItem();
   }
 
   private promocionTipo3(item: any) {
-    this.items.push({ articulo: item.articulo, cantidad: item.promo.promo.cantidad, descuento: 0, precio: item.articulo.precioVta, promocion: 'sin', extra: item.promo.promo.extra });
+    let currentItem: Item = this.pedidoService.getCurrentItem();
+    currentItem.cantidad = item.promo.promo.cantidad;
+    currentItem.precio = currentItem.articulo.precioVta;
+    currentItem.descuento = 0;
+    currentItem.promocion = 'sin';
+
+    this.pedidoService.getCurrentPedido().items.push(currentItem);
+
+    this.pedidoService.resetItem();
   }
 
   getTotal() {
     let total = 0;
 
-    for (let i = 0; i < this.items.length; i++) {
+    for (let i = 0; i < this.pedidoService.getCurrentPedido().items.length; i++) {
       let item = this.items[i];
 
       let subTotal = item.cantidad * item.precio;

@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 import { PedidoService } from '../../services/pedido.service';
 import { ArticuloService } from '../../services/articulo.service';
 import { ClienteService } from '../../services/cliente.service';
+import { PedidoTipoPage } from '../pedido/pedido-tipo/pedido-tipo';
 
 @Component({
   selector: 'page-home',
@@ -65,7 +66,8 @@ export class HomePage implements OnInit {
   }
 
   onAddClicked() {
-    this.navController.push(AddPedidoPage);
+    this.pedidoService.createPedido();
+    this.navController.push(PedidoTipoPage);
   }
 
   onDetalleClicked(pedido: any) {

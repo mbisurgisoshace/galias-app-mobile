@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ViewController, NavParams } from 'ionic-angular';
+import { PedidoService } from '../../../services/pedido.service';
 
 @Component({
   selector: 'page-promocion',
@@ -18,7 +19,7 @@ export class PromocionPage implements OnInit {
   articulo: any;
   extra: boolean = false;
 
-  constructor(public viewController: ViewController, public navParams: NavParams) {
+  constructor(public viewController: ViewController, public navParams: NavParams, public pedidoService: PedidoService) {
   }
 
   ngOnInit() {
