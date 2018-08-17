@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import { Storage } from '@ionic/storage';
 
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
@@ -35,15 +35,19 @@ export class PedidoService {
             });
     }
 
-    syncPedido(pedido: Pedido) {
+    async syncPedido(pedido: Pedido) {
         this.isLoading.next(true);
 
-        return this.http.post('https://galias-server-api-dev.herokuapp.com/api/pedido/new', pedido)
+        const token = await this.storage.get('token');
+            
+        const headers = new Headers({ 'authorization': token });
+
+        return this.http.post('https://galias-server-api-dev.herokuapp.com/api/pedido/new', pedido, { headers })
             .map((res) => {
                 return res.json();
             })
             .do((res) => {
-                
+
                 this.pedidos[this.pedidos.indexOf(pedido)]._id = res._id;
                 this.pedidos[this.pedidos.indexOf(pedido)].enviado = true;
 

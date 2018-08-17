@@ -161,23 +161,44 @@ export class AddPedidoPage implements OnInit {
         {
           text: 'Si',
           handler: () => {
-            this.pedidoService.syncPedido(this.pedidoService.getCurrentPedido()).subscribe((ped) => {
-              const toast = this.toastController.create({
-                message: 'Pedido enviado con ID: ' + ped._id,
-                duration: 5000
-              });
+            // this.pedidoService.syncPedido(this.pedidoService.getCurrentPedido()).subscribe((ped) => {
+            //   const toast = this.toastController.create({
+            //     message: 'Pedido enviado con ID: ' + ped._id,
+            //     duration: 5000
+            //   });
 
-              toast.present();
-              this.navController.popToRoot();
-            }, (err) => {
-              const toast = this.toastController.create({
-                message: 'No se ha podido enviar el pedido.',
-                duration: 5000
-              });
+            //   toast.present();
+            //   this.navController.popToRoot();
+            // }, (err) => {
+            //   const toast = this.toastController.create({
+            //     message: 'No se ha podido enviar el pedido.',
+            //     duration: 5000
+            //   });
 
-              toast.present();
-              this.navController.popToRoot();
-            });
+            //   toast.present();
+            //   this.navController.popToRoot();
+            // });
+
+            this.pedidoService.syncPedido(this.pedidoService.getCurrentPedido())
+              .then((obs) => {
+                obs.subscribe((ped) => {
+                  const toast = this.toastController.create({
+                    message: 'Pedido enviado con ID: ' + ped._id,
+                    duration: 5000
+                  });
+
+                  toast.present();
+                  this.navController.popToRoot();
+                }, (err) => {
+                  const toast = this.toastController.create({
+                    message: 'No se ha podido enviar el pedido.',
+                    duration: 5000
+                  });
+
+                  toast.present();
+                  this.navController.popToRoot();
+                });
+              })
           }
         },
         {

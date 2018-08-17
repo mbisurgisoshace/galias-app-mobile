@@ -27,8 +27,11 @@ export class MyApp {
       splashScreen.hide();
     });
 
+    console.log('init app');
+
     this.authService.isAuthenticated()
       .subscribe((isAuthenticated) => {
+        console.log('isAuthenticated', isAuthenticated);
         if (isAuthenticated) {
           this.rootPage = HomePage;
         } else {

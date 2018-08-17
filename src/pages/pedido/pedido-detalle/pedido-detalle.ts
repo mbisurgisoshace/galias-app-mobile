@@ -50,23 +50,44 @@ export class PedidoDetallePage implements OnInit {
   }
 
   onSendClicked(pedido: Pedido) {
-    this.pedidoService.syncPedido(pedido).subscribe((ped) => {
-      const toast = this.toastController.create({
-        message: 'Pedido enviado con ID: ' + ped._id,
-        duration: 5000
-      });
+    // this.pedidoService.syncPedido(pedido).subscribe((ped) => {
+    //   const toast = this.toastController.create({
+    //     message: 'Pedido enviado con ID: ' + ped._id,
+    //     duration: 5000
+    //   });
 
-      toast.present();
-      this.navController.pop();
-    }, (err) => {
-      const toast = this.toastController.create({
-        message: 'No se ha podido enviar el pedido.',
-        duration: 5000
-      });
+    //   toast.present();
+    //   this.navController.pop();
+    // }, (err) => {
+    //   const toast = this.toastController.create({
+    //     message: 'No se ha podido enviar el pedido.',
+    //     duration: 5000
+    //   });
 
-      toast.present();
-      this.navController.pop();
-    });
+    //   toast.present();
+    //   this.navController.pop();
+    // });
+
+    this.pedidoService.syncPedido(pedido)
+      .then((obs) => {
+        obs.subscribe((ped) => {
+          const toast = this.toastController.create({
+            message: 'Pedido enviado con ID: ' + ped._id,
+            duration: 5000
+          });
+
+          toast.present();
+          this.navController.pop();
+        }, (err) => {
+          const toast = this.toastController.create({
+            message: 'No se ha podido enviar el pedido.',
+            duration: 5000
+          });
+
+          toast.present();
+          this.navController.pop();
+        });
+      })
   }
 
   onEditClicked(index: number) {
