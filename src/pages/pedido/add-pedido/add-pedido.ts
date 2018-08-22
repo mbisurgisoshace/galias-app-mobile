@@ -152,6 +152,7 @@ export class AddPedidoPage implements OnInit {
   }
 
   onConfirmarClicked() {
+    this.pedidoService.getCurrentPedido().comentario = this.comentario;
     this.pedidoService.addPedido();
 
     const alert = this.alertController.create({
