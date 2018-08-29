@@ -42,7 +42,7 @@ export class PedidoService {
             
         const headers = new Headers({ 'authorization': token });
 
-        return this.http.post('https://galias-server-api-dev.herokuapp.com/api/pedido/new', pedido, { headers })
+        return this.http.post('https://galias-server-api.herokuapp.com/api/pedido/new', pedido, { headers })
             .map((res) => {
                 return res.json();
             })

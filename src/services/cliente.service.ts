@@ -39,7 +39,7 @@ export class ClienteService {
     syncClientes() {
         this.isLoading.next(true);
 
-        return this.http.get('https://galias-server-api-dev.herokuapp.com/api/cliente/list')
+        return this.http.get('https://galias-server-api.herokuapp.com/api/cliente/list')
             .map((res) => {
                 return res.json().clientes;
             })

@@ -49,7 +49,7 @@ export class AuthService {
         // });
 
         const obs = Observable.create((observer) => {
-            this.http.post('https://galias-server-api-dev.herokuapp.com/signin', { email, password })
+            this.http.post('https://galias-server-api.herokuapp.com/signin', { email, password })
                 .subscribe((res) => {
                     if (res.status === 200) {
                         this.storage.set('token', res.json().token)
