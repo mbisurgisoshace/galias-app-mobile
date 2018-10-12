@@ -14,8 +14,8 @@ import 'rxjs/add/operator/do'
 @Injectable()
 export class ArticuloService {
     isLoading = new BehaviorSubject<boolean>(false);
-    
-    private articulos: Articulo[]; 
+
+    private articulos: Articulo[];
 
     constructor(public http: Http, public authService: AuthService, public storage: Storage) {
         this.init();
@@ -38,7 +38,7 @@ export class ArticuloService {
     }
 
     syncArticulos() {
-        this.isLoading.next(true);        
+        this.isLoading.next(true);
 
         return this.http.get('https://galias-server-api.herokuapp.com/api/articulo/list')
             .map((res) => {
@@ -56,5 +56,12 @@ export class ArticuloService {
 
     getArticulos() {
         return this.articulos.slice();
+    }
+
+    getStock(articulo: string) {
+        return this.http.get(`http://centrocompartido.engux.com.ar:8099/galias-server-backend/articulo/stock/${articulo}`)
+            .map((res) => {
+                return res.json();
+            });
     }
 }

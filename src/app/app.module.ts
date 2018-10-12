@@ -7,6 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { Geolocation } from '@ionic-native/geolocation';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -59,12 +60,13 @@ import { SucursalPage } from '../pages/sucursal/sucursal';
   providers: [
     StatusBar,
     SplashScreen,
+    BackgroundGeolocation,
     Geolocation,
     AuthService,
     PedidoService,
     ClienteService,
     ArticuloService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+export class AppModule { }

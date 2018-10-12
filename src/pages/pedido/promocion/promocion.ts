@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ViewController, NavParams } from 'ionic-angular';
 import { PedidoService } from '../../../services/pedido.service';
+import { ArticuloService } from '../../../services/articulo.service';
 
 @Component({
   selector: 'page-promocion',
@@ -18,12 +19,16 @@ export class PromocionPage implements OnInit {
   promocion: any;
   articulo: any;
   extra: boolean = false;
+  stock: number = 0;
 
-  constructor(public viewController: ViewController, public navParams: NavParams, public pedidoService: PedidoService) {
+  constructor(public viewController: ViewController, public navParams: NavParams, public pedidoService: PedidoService, public articuloService: ArticuloService) {
   }
 
   ngOnInit() {
     this.articulo = this.navParams.get('articulo');
+    this.articuloService.getStock(this.articulo.codigo).subscribe((cantidad: number) => {
+      this.stock = cantidad;
+    });
   }
 
   onPromoSelected(promocion: any) {
